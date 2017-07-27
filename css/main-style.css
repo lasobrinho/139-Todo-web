@@ -54,6 +54,17 @@ span {
 	margin-bottom: 0px;
 }
 
+#task-level-0 span {
+ 	font-size: 1.75rem;
+}
+#task-level-0 .row {
+	margin-bottom: 0px;
+}
+#task-level-0 p {
+	margin-top: 6px;
+	margin-bottom: 0px;
+}
+
 .taskCompleted {
 	text-decoration: line-through;
 	text-decoration-color: green;

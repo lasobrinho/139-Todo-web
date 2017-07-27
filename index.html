@@ -86,6 +86,21 @@
 				</div>
 			</div>
 
+			<div v-if="getTaskListVisibility('0')">
+				<h5 class="center">Other Tasks</h5>
+				<div class="divider"></div>
+				<div class="row"></div>
+				<div class="row center" id="task-level-0">
+					<div class="col s12">
+						<task-list v-for="task in otherTasks" 
+								   v-bind:task="task" 
+								   v-bind:key="task.id" 
+								   :update-task-list-status="updateTaskListStatus" >
+						</task-list>
+					</div>
+				</div>
+			</div>
+
 		</main>
 	</div>
 </body>
