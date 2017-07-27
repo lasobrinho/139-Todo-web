@@ -1,0 +1,66 @@
+
+
+@media only screen and (max-width : 992px) {
+	header, main, footer {
+		padding-left: 0;
+	}
+}
+
+
+.container {
+	width: 55%;
+}
+
+label {
+	color: #444;
+	font-weight: 300;
+}
+
+.top-title {
+	font-weight: 300;
+}
+
+span {
+	font-weight: 300;
+	cursor: default;
+}
+
+
+#task-level-1 span {
+ 	font-size: 3.75rem;
+ 	padding-left: 58px;
+ 	padding-top: 5px;
+}
+
+#task-level-3 span {
+ 	font-size: 2.5rem;
+ 	padding-left: 45px;
+}
+#task-level-3 .row {
+	margin-bottom: 0px;
+}
+#task-level-3 p {
+	margin-bottom: 5px;
+}
+
+#task-level-9 span {
+ 	font-size: 1.75rem;
+}
+#task-level-9 .row {
+	margin-bottom: 0px;
+}
+#task-level-9 p {
+	margin-top: 6px;
+	margin-bottom: 0px;
+}
+
+.taskCompleted {
+	text-decoration: line-through;
+	text-decoration-color: green;
+	color: #AAA;
+}
+
+.taskListDisabled {
+	color: #EEE;
+	pointer-events: none;
+}

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Vue Test</title>
+	
+	<script src="https://unpkg.com/vue"></script>
+	
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
+	<link rel="stylesheet" type="text/css" href="main-style.css">
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+	<div id="app139">
+
+		<nav class="cyan darken-4">
+			<div class="nav-wrapper container">
+				<a href="#" class="brand-logo center white-text">139</a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><a href="#"><i class="material-icons">settings</i></a></li>
+					<li><a href="#">Logout</a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<main class="container">
+
+		
+
+			<div class="row"></div>
+			<div class="row center">
+				<div class="col s12">
+					<h4 class="top-title">Welcome {{ userName }}! Here are your tasks for today:</h4>
+				</div>
+			</div>
+
+			<div v-bind:class="{ taskListDisabled: getTaskListVisibility('1') }">
+				<h3 class="center">1</h3>
+				<div class="divider"></div>
+				<div class="row center" id="task-level-1">
+					<div class="col s12">
+						<task-list v-for="task in oneTask" 
+								   v-bind:task="task" 
+								   v-bind:key="task.id" 
+								   :update-task-list-status="updateTaskListStatus" >
+						</task-list>
+					</div>
+				</div>
+			</div>
+
+			<div v-bind:class="{ taskListDisabled: getTaskListVisibility('3') }">
+				<h4 class="center">3</h4>
+				<div class="divider"></div>
+				<div class="row center" id="task-level-3">
+					<div class="col s12">
+						<task-list v-for="task in threeTasks" 
+								   v-bind:task="task" 
+								   v-bind:key="task.id" 
+								   :update-task-list-status="updateTaskListStatus" >
+						</task-list>
+					</div>
+				</div>
+			</div>
+
+			<div v-bind:class="{ taskListDisabled: getTaskListVisibility('9') }">
+				<h5 class="center">9</h5>
+				<div class="divider"></div>
+				<div class="row center" id="task-level-9">
+					<div class="col s12">
+						<task-list v-for="task in nineTasks" 
+								   v-bind:task="task" 
+								   v-bind:key="task.id" 
+								   :update-task-list-status="updateTaskListStatus" >
+						</task-list>
+					</div>
+				</div>
+			</div>
+
+		</main>
+	</div>
+</body>
+
+<script type="text/javascript">
+	Vue.component('task-list', {
+		props: ['task', 'updateTaskListStatus'],
+		template: '<div class="row">\
+		               <div class="col s12">\
+		                   <p>\
+		                       <span v-on:click="checkTask(task, $event)" v-bind:class="{ taskCompleted: task.isCompleted }" :id="generateTagId(task.id)">{{ task.text }}</span>\
+		                   </p>\
+		               </div>\
+		           </div>',
+		methods: {
+			checkTask: function (task, event) {
+				task.isCompleted = !(task.isCompleted);
+				this.updateTaskListStatus(task);
+			},
+			generateTagId: function (id) {
+				return "task-" + id;
+			},
+		}
+	})
+
+	var app = new Vue({
+		el: '#app139',
+		data: {
+			userName: "Lucas",
+			activeList: '1',
+			oneTask: 
+			[
+				{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1' }
+			],
+			threeTasks: 
+			[
+				{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3' },
+				{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3' },
+				{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3' },
+			],
+			nineTasks: 
+			[
+				{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9' },
+				{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9' },
+				{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
+				{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
+				{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
+				{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9' },
+				{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
+				{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
+				{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
+			],
+			otherTasks:
+			[
+				{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0' },
+				{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0' },
+				{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0' },
+				{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0' },
+			],
+		},
+		methods: {
+			updateTaskListStatus: function (task) {
+				priority = task.priority;
+				if (priority == '1') {
+					if (this.oneTask[0].isCompleted) {
+						this.activeList = '3';
+					}
+				}
+				if (priority == '3') {
+					threeCompleted = true;
+					for (var i = 0; i < this.threeTasks.length; i++) {
+						if (this.threeTasks[i].isCompleted == false) {
+							threeCompleted = false;
+						}
+					}
+					if (threeCompleted) {
+						this.activeList = '9';
+					}
+				}
+				if (priority == '9') {
+					console.log("evaluating '9'");
+					nineCompleted = true;
+					for (var i = 0; i < this.nineTasks.length; i++) {
+						if (this.nineTasks[i].isCompleted == false) {
+							nineCompleted = false;
+						}
+					}
+					if (nineCompleted) {
+						this.activeList = '0';
+					}
+				}
+				console.log(this.activeList);
+			},
+			getTaskListVisibility: function (taskListId) {
+				if (this.activeList != taskListId) {
+					return true;
+				}
+				return false;
+			},
+		}
+	})
+</script>
+
+</html>
