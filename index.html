@@ -43,7 +43,7 @@
 				</div>
 			</div>
 
-			<div v-bind:class="{ taskListDisabled: getTaskListVisibility('1') }">
+			<div v-if="getTaskListVisibility('1')">
 				<h3 class="center">1</h3>
 				<div class="divider"></div>
 				<div class="row center" id="task-level-1">
@@ -57,7 +57,7 @@
 				</div>
 			</div>
 
-			<div v-bind:class="{ taskListDisabled: getTaskListVisibility('3') }">
+			<div v-if="getTaskListVisibility('3')">
 				<h4 class="center">3</h4>
 				<div class="divider"></div>
 				<div class="row center" id="task-level-3">
@@ -71,9 +71,10 @@
 				</div>
 			</div>
 
-			<div v-bind:class="{ taskListDisabled: getTaskListVisibility('9') }">
+			<div v-if="getTaskListVisibility('9')">
 				<h5 class="center">9</h5>
 				<div class="divider"></div>
+				<div class="row"></div>
 				<div class="row center" id="task-level-9">
 					<div class="col s12">
 						<task-list v-for="task in nineTasks" 
@@ -165,7 +166,6 @@
 					}
 				}
 				if (priority == '9') {
-					console.log("evaluating '9'");
 					nineCompleted = true;
 					for (var i = 0; i < this.nineTasks.length; i++) {
 						if (this.nineTasks[i].isCompleted == false) {
@@ -176,13 +176,12 @@
 						this.activeList = '0';
 					}
 				}
-				console.log(this.activeList);
 			},
 			getTaskListVisibility: function (taskListId) {
 				if (this.activeList != taskListId) {
-					return true;
+					return false;
 				}
-				return false;
+				return true;
 			},
 		}
 	})
