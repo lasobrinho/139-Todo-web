@@ -43,60 +43,62 @@
 				</div>
 			</div>
 
-			<div v-if="getTaskListVisibility('1')">
-				<h3 class="center">1</h3>
-				<div class="divider"></div>
-				<div class="row center" id="task-level-1">
-					<div class="col s12">
-						<task-list v-for="task in oneTask" 
-								   v-bind:task="task" 
-								   v-bind:key="task.id" 
-								   :update-task-list-status="updateTaskListStatus" >
-						</task-list>
+			<div class="task-viewport valign-wrapper center-align">
+				<div v-if="getTaskListVisibility('1')">
+					<h3 class="center">1</h3>
+					<div class="divider"></div>
+					<div class="row center" id="task-level-1">
+						<div class="col s12">
+							<task-list v-for="task in oneTask" 
+									   v-bind:task="task" 
+									   v-bind:key="task.id" 
+									   :update-task-list-status="updateTaskListStatus" >
+							</task-list>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div v-if="getTaskListVisibility('3')">
-				<h4 class="center">3</h4>
-				<div class="divider"></div>
-				<div class="row center" id="task-level-3">
-					<div class="col s12">
-						<task-list v-for="task in threeTasks" 
-								   v-bind:task="task" 
-								   v-bind:key="task.id" 
-								   :update-task-list-status="updateTaskListStatus" >
-						</task-list>
+				<div v-if="getTaskListVisibility('3')">
+					<h4 class="center">3</h4>
+					<div class="divider"></div>
+					<div class="row center" id="task-level-3">
+						<div class="col s12">
+							<task-list v-for="task in threeTasks" 
+									   v-bind:task="task" 
+									   v-bind:key="task.id" 
+									   :update-task-list-status="updateTaskListStatus" >
+							</task-list>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div v-if="getTaskListVisibility('9')">
-				<h5 class="center">9</h5>
-				<div class="divider"></div>
-				<div class="row"></div>
-				<div class="row center" id="task-level-9">
-					<div class="col s12">
-						<task-list v-for="task in nineTasks" 
-								   v-bind:task="task" 
-								   v-bind:key="task.id" 
-								   :update-task-list-status="updateTaskListStatus" >
-						</task-list>
+				<div v-if="getTaskListVisibility('9')">
+					<h5 class="center">9</h5>
+					<div class="divider"></div>
+					<div class="row"></div>
+					<div class="row center" id="task-level-9">
+						<div class="col s12">
+							<task-list v-for="task in nineTasks" 
+									   v-bind:task="task" 
+									   v-bind:key="task.id" 
+									   :update-task-list-status="updateTaskListStatus" >
+							</task-list>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div v-if="getTaskListVisibility('0')">
-				<h5 class="center">Other Tasks</h5>
-				<div class="divider"></div>
-				<div class="row"></div>
-				<div class="row center" id="task-level-0">
-					<div class="col s12">
-						<task-list v-for="task in otherTasks" 
-								   v-bind:task="task" 
-								   v-bind:key="task.id" 
-								   :update-task-list-status="updateTaskListStatus" >
-						</task-list>
+				<div v-if="getTaskListVisibility('0')">
+					<h5 class="center">Other Tasks</h5>
+					<div class="divider"></div>
+					<div class="row"></div>
+					<div class="row center" id="task-level-0">
+						<div class="col s12">
+							<task-list v-for="task in otherTasks" 
+									   v-bind:task="task" 
+									   v-bind:key="task.id" 
+									   :update-task-list-status="updateTaskListStatus" >
+							</task-list>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -8,7 +8,7 @@
 
 
 .container {
-	width: 55%;
+	width: 75%;
 }
 
 label {
@@ -28,13 +28,11 @@ span {
 
 #task-level-1 span {
  	font-size: 3.75rem;
- 	padding-left: 58px;
  	padding-top: 5px;
 }
 
 #task-level-3 span {
  	font-size: 2.5rem;
- 	padding-left: 45px;
 }
 #task-level-3 .row {
 	margin-bottom: 0px;
@@ -74,4 +72,12 @@ span {
 .taskListDisabled {
 	color: #EEE;
 	pointer-events: none;
+}
+
+.task-viewport {
+	padding-top: 10%;
+}
+
+div.task-viewport > div {
+	width: 5000px;
 }
