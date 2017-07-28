@@ -45,7 +45,7 @@
 
 			<div class="task-viewport valign-wrapper center-align">
 				
-				<transition name="slide-fade" mode="out-in">
+				<transition name="my-slide" mode="out-in">
 					<div v-if="getTaskListVisibility('1')" key="task-1">
 						<h3 class="center">1</h3>
 						<div class="divider"></div>
@@ -124,6 +124,7 @@
 		methods: {
 			checkTask: function (task, event) {
 				task.isCompleted = !(task.isCompleted);
+				document.getElementById("task-" + task.id).classList.add('taskCompleted');
 				this.updateTaskListStatus(task);
 			},
 			generateTagId: function (id) {

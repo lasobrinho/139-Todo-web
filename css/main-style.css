@@ -82,16 +82,14 @@ div.task-viewport > div {
 	width: 5000px;
 }
 
-/* Enter and leave animations can use different */
-/* durations and timing functions.              */
-.slide-fade-enter-active {
-	transition: all .2s ease;
+
+.my-slide-enter-active {
+	transition: all 2s ease;
 }
-.slide-fade-leave-active {
-	transition: all .5s cubic-bezier(.17,.67,.83,-0.14);
+.my-slide-leave-active {
+	transition: all .5s cubic-bezier(.57,.67,.93,-0.14);
 }
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-	transform: translateX(-50px);
+.my-slide-enter, .my-slide-leave-to {
+	transform: translateX(100px);
 	opacity: 0;
 }
