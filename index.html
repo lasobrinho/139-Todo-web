@@ -32,79 +32,17 @@
 			</div>
 		</nav>
 		
-		<main class="container">
+		<main class="container">		
 
-		
+			<main-header :user-name="userName"></main-header>
 
-			<div class="row"></div>
-			<div class="row center">
-				<div class="col s12">
-					<h4 class="top-title">Welcome {{ userName }}! Here are your tasks for today:</h4>
-				</div>
-			</div>
-
-			<div class="task-viewport valign-wrapper center-align">
-				
+			<div class="task-viewport valign-wrapper center-align">			
 				<transition name="my-slide" mode="out-in">
-					<div v-if="getTaskListVisibility('1')" key="task-1">
-						<h3 class="center">1</h3>
-						<div class="divider"></div>
-						<div class="row center" id="task-level-1">
-							<div class="col s12">
-								<task-list v-for="task in oneTask" 
-										   v-bind:task="task" 
-										   v-bind:key="task.id" 
-										   :update-task-list-status="updateTaskListStatus" >
-								</task-list>
-							</div>
-						</div>
-					</div>
-
-					<div v-if="getTaskListVisibility('3')" key="task-3">
-						<h4 class="center">3</h4>
-						<div class="divider"></div>
-						<div class="row center" id="task-level-3">
-							<div class="col s12">
-								<task-list v-for="task in threeTasks" 
-										   v-bind:task="task" 
-										   v-bind:key="task.id" 
-										   :update-task-list-status="updateTaskListStatus" >
-								</task-list>
-							</div>
-						</div>
-					</div>
-
-					<div v-if="getTaskListVisibility('9')" key="task-9">
-						<h5 class="center">9</h5>
-						<div class="divider"></div>
-						<div class="row"></div>
-						<div class="row center" id="task-level-9">
-							<div class="col s12">
-								<task-list v-for="task in nineTasks" 
-										   v-bind:task="task" 
-										   v-bind:key="task.id" 
-										   :update-task-list-status="updateTaskListStatus" >
-								</task-list>
-							</div>
-						</div>
-					</div>
-
-					<div v-if="getTaskListVisibility('0')" key="task-0">
-						<h5 class="center">Other Tasks</h5>
-						<div class="divider"></div>
-						<div class="row"></div>
-						<div class="row center" id="task-level-0">
-							<div class="col s12">
-								<task-list v-for="task in otherTasks" 
-										   v-bind:task="task" 
-										   v-bind:key="task.id" 
-										   :update-task-list-status="updateTaskListStatus" >
-								</task-list>
-							</div>
-						</div>
-					</div>
+					<task-list-container v-if="isListActive('1')" key="task-1" :list-tasks="tasks1" :list-title="'1'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list-container>
+					<task-list-container v-if="isListActive('3')" key="task-3" :list-tasks="tasks3" :list-title="'3'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list-container>
+					<task-list-container v-if="isListActive('9')" key="task-9" :list-tasks="tasks9" :list-title="'9'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list-container>
+					<task-list-container v-if="isListActive('0')" key="task-0" :list-tasks="tasks0" :list-title="'0'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list-container>
 				</transition>
-
 			</div>
 
 		</main>
@@ -118,6 +56,33 @@
 				<span v-on:click="checkTask(task, $event)" v-bind:class="{ taskCompleted: task.isCompleted }" :id="generateTagId(task.id)">{{ task.text }}</span>
 			</p>
 		</div>
+	</div>
+</template>
+
+<template id="main-header-template">
+	<div>
+		<div class="row"></div>
+		<div class="row center">
+			<div class="col s12">
+				<h4 class="top-title">Welcome {{ userName }}! Here are your tasks for today:</h4>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template id="task-list-container-template">
+	<div>
+			<h3 class="center">{{ listTitle }}</h3>
+			<div class="divider"></div>
+			<div class="row center" :id="'task-level-' + listTitle">
+				<div class="col s12">
+					<task-list  v-for="task in listTasks" 
+								v-bind:task="task" 
+								v-bind:key="task.id" 
+								:update-task-list-status="updateTaskListStatus" >
+					</task-list>
+				</div>
+			</div>
 	</div>
 </template>
 
@@ -137,23 +102,30 @@
 		}
 	})
 
+	Vue.component('main-header', {
+		props: ['userName'],
+		template: '#main-header-template'
+	})
+
+	Vue.component('task-list-container', {
+		props: ['listTasks', 'listTitle', 'activeList', 'updateTaskListStatus'],
+		template: '#task-list-container-template'
+	})
+
 	var app = new Vue({
 		el: '#app139',
 		data: {
 			userName: "Lucas",
 			activeList: '1',
-			oneTask: 
-			[
-				{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1' }
+			tasks1: [
+				{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1' },
 			],
-			threeTasks: 
-			[
+			tasks3: [
 				{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3' },
 				{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3' },
 				{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3' },
 			],
-			nineTasks: 
-			[
+			tasks9: [
 				{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9' },
 				{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9' },
 				{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
@@ -164,8 +136,7 @@
 				{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
 				{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
 			],
-			otherTasks:
-			[
+			tasks0: [
 				{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0' },
 				{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0' },
 				{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0' },
@@ -173,17 +144,17 @@
 			],
 		},
 		methods: {
-			updateTaskListStatus: function (task) {
+			updateTaskListStatus: function (task) {		// Write a clever code to check this...
 				priority = task.priority;
 				if (priority == '1') {
-					if (this.oneTask[0].isCompleted) {
+					if (this.tasks1[0].isCompleted) {
 						this.activeList = '3';
 					}
 				}
 				if (priority == '3') {
 					threeCompleted = true;
-					for (var i = 0; i < this.threeTasks.length; i++) {
-						if (this.threeTasks[i].isCompleted == false) {
+					for (var i = 0; i < this.tasks3.length; i++) {
+						if (this.tasks3[i].isCompleted == false) {
 							threeCompleted = false;
 						}
 					}
@@ -193,8 +164,8 @@
 				}
 				if (priority == '9') {
 					nineCompleted = true;
-					for (var i = 0; i < this.nineTasks.length; i++) {
-						if (this.nineTasks[i].isCompleted == false) {
+					for (var i = 0; i < this.tasks9.length; i++) {
+						if (this.tasks9[i].isCompleted == false) {
 							nineCompleted = false;
 						}
 					}
@@ -203,12 +174,12 @@
 					}
 				}
 			},
-			getTaskListVisibility: function (taskListId) {
-				if (this.activeList != taskListId) {
-					return false;
+			isListActive: function(listTitle) {
+				if (listTitle == this.activeList) {
+					return true;
 				}
-				return true;
-			},
+				return false;
+			}
 		}
 	})
 </script>
