@@ -17,7 +17,8 @@ label {
 }
 
 .top-title {
-	font-weight: 300;
+	font-size: 1.25vmax;
+	font-weight: 400;
 }
 
 span {
@@ -27,12 +28,12 @@ span {
 
 
 #task-level-1 span {
- 	font-size: 3.75rem;
+ 	font-size: 3.75vmax;
  	padding-top: 5px;
 }
 
 #task-level-3 span {
- 	font-size: 2.5rem;
+ 	font-size: 2.25vmax;
 }
 #task-level-3 .row {
 	margin-bottom: 0px;
@@ -42,7 +43,7 @@ span {
 }
 
 #task-level-9 span {
- 	font-size: 1.75rem;
+ 	font-size: 1.5vmax;
 }
 #task-level-9 .row {
 	margin-bottom: 0px;
@@ -53,7 +54,7 @@ span {
 }
 
 #task-level-0 span {
- 	font-size: 1.75rem;
+ 	font-size: 1.5vmax;
 }
 #task-level-0 .row {
 	margin-bottom: 0px;
@@ -65,8 +66,8 @@ span {
 
 .taskCompleted {
 	text-decoration: line-through;
-	text-decoration-color: green;
-	color: #AAA;
+	text-decoration-color: #004d40;
+	color: #999;
 }
 
 .taskListDisabled {
@@ -75,7 +76,7 @@ span {
 }
 
 .task-viewport {
-	padding-top: 10%;
+	padding-top: 5%;
 }
 
 div.task-viewport > div {
@@ -84,12 +85,21 @@ div.task-viewport > div {
 
 
 .my-slide-enter-active {
-	transition: all 2s ease;
+	transition: all .75s ease;
 }
 .my-slide-leave-active {
-	transition: all .5s cubic-bezier(.57,.67,.93,-0.14);
+	transition: all .5s cubic-bezier(.89,.19,.89,.29);
 }
 .my-slide-enter, .my-slide-leave-to {
 	transform: translateX(100px);
 	opacity: 0;
 }
+
+span[id^="task-"] {
+	transition: color linear .5s;
+}
+
+span[id^="task-"]:hover {
+	color: #999;
+}
+
