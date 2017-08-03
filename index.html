@@ -34,7 +34,7 @@
 		
 		<main class="container">
 			
-			<task-list-container :user-name="userName" :task-lists="taskLists" :active-list="activeList" :update-task-list-status="updateTaskListStatus" :is-list-active="isListActive"></task-list-container>
+			<task-list-container :user-name="userName"></task-list-container>
 
 		</main>
 	</div>
@@ -111,53 +111,39 @@
 	})
 
 	Vue.component('task-list-container', {
-		props: ['userName', 'taskLists', 'activeList', 'updateTaskListStatus', 'isListActive'],
-		template: '#task-list-container-template'
-	})
-
-	Vue.component('task-list-header', {
 		props: ['userName'],
-		template: '#task-list-header-template'
-	})
-
-	Vue.component('task-list', {
-		props: ['taskList', 'listTitle', 'activeList', 'updateTaskListStatus'],
-		template: '#task-list-template'
-	})
-
-	var app = new Vue({
-		el: '#app139',
-		data: {
-			userName: "Lucas",
-			activeList: '1',
-			taskLists: {
-				tasks1: [
-				{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1' },
-				],
-				tasks3: [
-					{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3' },
-					{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3' },
-					{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3' },
-				],
-				tasks9: [
-					{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9' },
-					{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9' },
-					{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
-					{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
-					{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
-					{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9' },
-					{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
-					{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
-					{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
-				],
-				tasks0: [
-					{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0' },
-					{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0' },
-					{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0' },
-					{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0' },
-				],
-			},
-			
+		template: '#task-list-container-template',
+		data: function() {
+			return {
+				activeList: '1',
+				taskLists: {
+					tasks1: [
+						{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1' },
+					],
+					tasks3: [
+						{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3' },
+						{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3' },
+						{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3' },
+					],
+					tasks9: [
+						{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9' },
+						{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9' },
+						{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
+						{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
+						{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
+						{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9' },
+						{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
+						{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
+						{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
+					],
+					tasks0: [
+						{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0' },
+						{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0' },
+						{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0' },
+						{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0' },
+					],
+				},
+			}
 		},
 		methods: {
 			updateTaskListStatus: function (task) {		// Write a clever code to check this...
@@ -196,6 +182,23 @@
 				}
 				return false;
 			}
+		}
+	})
+
+	Vue.component('task-list-header', {
+		props: ['userName'],
+		template: '#task-list-header-template'
+	})
+
+	Vue.component('task-list', {
+		props: ['taskList', 'listTitle', 'activeList', 'updateTaskListStatus'],
+		template: '#task-list-template'
+	})
+
+	var app = new Vue({
+		el: '#app139',
+		data: {
+			userName: "Lucas",
 		}
 	})
 </script>
