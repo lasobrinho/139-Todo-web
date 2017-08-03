@@ -32,10 +32,8 @@
 			</div>
 		</nav>
 		
-		<main class="container">
-			
+		<main class="container">			
 			<task-list-container :user-name="userName"></task-list-container>
-
 		</main>
 	</div>
 </body>
@@ -100,12 +98,12 @@
 		template: '#task-template',
 		methods: {
 			checkTask: function (task, event) {
-				task.isCompleted = !(task.isCompleted);
-				document.getElementById("task-" + task.id).classList.add('taskCompleted');
-				this.updateTaskListStatus(task);
+				task.isCompleted = !(task.isCompleted)
+				document.getElementById("task-" + task.id).classList.add('taskCompleted')
+				this.updateTaskListStatus(task)
 			},
 			generateTagId: function (id) {
-				return "task-" + id;
+				return "task-" + id
 			},
 		}
 	})
@@ -150,37 +148,37 @@
 				priority = task.priority;
 				if (priority == '1') {
 					if (this.taskLists.tasks1[0].isCompleted) {
-						this.activeList = '3';
+						this.activeList = '3'
 					}
 				}
 				if (priority == '3') {
-					threeCompleted = true;
+					threeCompleted = true
 					for (var i = 0; i < this.taskLists.tasks3.length; i++) {
 						if (this.taskLists.tasks3[i].isCompleted == false) {
-							threeCompleted = false;
+							threeCompleted = false
 						}
 					}
 					if (threeCompleted) {
-						this.activeList = '9';
+						this.activeList = '9'
 					}
 				}
 				if (priority == '9') {
 					nineCompleted = true;
 					for (var i = 0; i < this.taskLists.tasks9.length; i++) {
 						if (this.taskLists.tasks9[i].isCompleted == false) {
-							nineCompleted = false;
+							nineCompleted = false
 						}
 					}
 					if (nineCompleted) {
-						this.activeList = '0';
+						this.activeList = '0'
 					}
 				}
 			},
 			isListActive: function(listTitle) {
 				if (listTitle == this.activeList) {
-					return true;
+					return true
 				}
-				return false;
+				return false
 			}
 		}
 	})
