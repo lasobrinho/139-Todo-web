@@ -32,18 +32,9 @@
 			</div>
 		</nav>
 		
-		<main class="container">		
-
-			<main-header :user-name="userName"></main-header>
-
-			<div class="task-viewport valign-wrapper center-align">			
-				<transition name="my-slide" mode="out-in">
-					<task-list-container v-if="isListActive('1')" key="task-1" :list-tasks="tasks1" :list-title="'1'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list-container>
-					<task-list-container v-if="isListActive('3')" key="task-3" :list-tasks="tasks3" :list-title="'3'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list-container>
-					<task-list-container v-if="isListActive('9')" key="task-9" :list-tasks="tasks9" :list-title="'9'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list-container>
-					<task-list-container v-if="isListActive('0')" key="task-0" :list-tasks="tasks0" :list-title="'0'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list-container>
-				</transition>
-			</div>
+		<main class="container">
+			
+			<task-list-container :user-name="userName" :task-lists="taskLists" :active-list="activeList" :update-task-list-status="updateTaskListStatus" :is-list-active="isListActive"></task-list-container>
 
 		</main>
 	</div>
@@ -59,7 +50,7 @@
 	</div>
 </template>
 
-<template id="main-header-template">
+<template id="task-list-header-template">
 	<div>
 		<div class="row"></div>
 		<div class="row center">
@@ -70,24 +61,41 @@
 	</div>
 </template>
 
-<template id="task-list-container-template">
+<template id="task-list-template">
 	<div>
-			<h3 class="center">{{ listTitle }}</h3>
-			<div class="divider teal darken-4"></div>
-			<div class="row center" :id="'task-level-' + listTitle">
-				<div class="col s12">
-					<task-list  v-for="task in listTasks" 
-								v-bind:task="task" 
-								v-bind:key="task.id" 
-								:update-task-list-status="updateTaskListStatus" >
-					</task-list>
-				</div>
+		<h3 class="center">{{ listTitle }}</h3>
+		<div class="divider teal darken-4"></div>
+		<div class="row center" :id="'task-level-' + listTitle">
+			<div class="col s12">
+				<task v-for="task in taskList" 
+					  v-bind:task="task" 
+					  v-bind:key="task.id" 
+					  :update-task-list-status="updateTaskListStatus" >
+				</task>
 			</div>
+		</div>
 	</div>
 </template>
 
+<template id="task-list-container-template">
+	<div>
+		<task-list-header :user-name="userName"></task-list-header>
+
+		<div class="task-viewport valign-wrapper center-align">			
+			<transition name="my-slide" mode="out-in">
+				<task-list v-if="isListActive('1')" key="task-1" :task-list="taskLists.tasks1" :list-title="'1'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
+				<task-list v-if="isListActive('3')" key="task-3" :task-list="taskLists.tasks3" :list-title="'3'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
+				<task-list v-if="isListActive('9')" key="task-9" :task-list="taskLists.tasks9" :list-title="'9'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
+				<task-list v-if="isListActive('0')" key="task-0" :task-list="taskLists.tasks0" :list-title="'0'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
+			</transition>
+		</div>
+	</div>
+</template>
+
+
+
 <script type="text/javascript">
-	Vue.component('task-list', {
+	Vue.component('task', {
 		props: ['task', 'updateTaskListStatus'],
 		template: '#task-template',
 		methods: {
@@ -102,14 +110,19 @@
 		}
 	})
 
-	Vue.component('main-header', {
-		props: ['userName'],
-		template: '#main-header-template'
+	Vue.component('task-list-container', {
+		props: ['userName', 'taskLists', 'activeList', 'updateTaskListStatus', 'isListActive'],
+		template: '#task-list-container-template'
 	})
 
-	Vue.component('task-list-container', {
-		props: ['listTasks', 'listTitle', 'activeList', 'updateTaskListStatus'],
-		template: '#task-list-container-template'
+	Vue.component('task-list-header', {
+		props: ['userName'],
+		template: '#task-list-header-template'
+	})
+
+	Vue.component('task-list', {
+		props: ['taskList', 'listTitle', 'activeList', 'updateTaskListStatus'],
+		template: '#task-list-template'
 	})
 
 	var app = new Vue({
@@ -117,44 +130,47 @@
 		data: {
 			userName: "Lucas",
 			activeList: '1',
-			tasks1: [
+			taskLists: {
+				tasks1: [
 				{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1' },
-			],
-			tasks3: [
-				{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3' },
-				{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3' },
-				{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3' },
-			],
-			tasks9: [
-				{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9' },
-				{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9' },
-				{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
-				{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
-				{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
-				{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9' },
-				{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
-				{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
-				{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
-			],
-			tasks0: [
-				{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0' },
-				{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0' },
-				{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0' },
-				{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0' },
-			],
+				],
+				tasks3: [
+					{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3' },
+					{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3' },
+					{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3' },
+				],
+				tasks9: [
+					{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9' },
+					{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9' },
+					{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
+					{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
+					{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
+					{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9' },
+					{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
+					{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
+					{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
+				],
+				tasks0: [
+					{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0' },
+					{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0' },
+					{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0' },
+					{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0' },
+				],
+			},
+			
 		},
 		methods: {
 			updateTaskListStatus: function (task) {		// Write a clever code to check this...
 				priority = task.priority;
 				if (priority == '1') {
-					if (this.tasks1[0].isCompleted) {
+					if (this.taskLists.tasks1[0].isCompleted) {
 						this.activeList = '3';
 					}
 				}
 				if (priority == '3') {
 					threeCompleted = true;
-					for (var i = 0; i < this.tasks3.length; i++) {
-						if (this.tasks3[i].isCompleted == false) {
+					for (var i = 0; i < this.taskLists.tasks3.length; i++) {
+						if (this.taskLists.tasks3[i].isCompleted == false) {
 							threeCompleted = false;
 						}
 					}
@@ -164,8 +180,8 @@
 				}
 				if (priority == '9') {
 					nineCompleted = true;
-					for (var i = 0; i < this.tasks9.length; i++) {
-						if (this.tasks9[i].isCompleted == false) {
+					for (var i = 0; i < this.taskLists.tasks9.length; i++) {
+						if (this.taskLists.tasks9[i].isCompleted == false) {
 							nineCompleted = false;
 						}
 					}
