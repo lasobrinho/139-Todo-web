@@ -27,8 +27,9 @@
 			<div class="nav-wrapper container">
 				<a href="#" class="brand-logo center teal-text text-darken-4">139</a>
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><router-link to="/login" class="teal-text text-darken-4">Sign In</router-link></li>
 					<li><router-link to="/tasks" class="teal-text text-darken-4">Task List</router-link></li>
-					<li><a href="#"><i class="material-icons teal-text text-darken-4">settings</i></a></li>
+					<li><a href="#" class="teal-text text-darken-4">Settings</a></li>
 					<li><a href="#" class="teal-text text-darken-4">Logout</a></li>
 				</ul>
 			</div>
@@ -90,6 +91,35 @@
 			</transition>
 		</div>
 	</div>
+</template>
+
+<template id="login-page-template">
+	<div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="col s12">
+				<h4>Sign In to 139</h4>
+			</div>
+		</div>
+
+		<div class="row">
+			<form class="col s12">			
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="email" type="email" class="validate">
+						<label for="email">Email</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="password" type="password" class="validate">
+						<label for="password">Password</label>
+					</div>
+				</div>
+			</form>
+		</div>
+		<router-link to="/tasks" class="waves-effect waves-light btn teal darken-4">Sign In</router-link>
+	</div>	
 </template>
 
 
@@ -194,8 +224,13 @@
 		template: '#task-list-template'
 	})
 
+	var LoginComponent = Vue.component('login-page', {
+		template: '#login-page-template'
+	})
+
 	const routes = [
-		{ path: '/tasks', component: TaskListComponent }
+		{ path: '/tasks', component: TaskListComponent },
+		{ path: '/login', component: LoginComponent}
 	]
 	const router = new VueRouter({
 		routes: routes
