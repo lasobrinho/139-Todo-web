@@ -6,6 +6,7 @@
 	<title>139 Todo</title>
 	
 	<script src="https://unpkg.com/vue"></script>
+	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 	
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
@@ -26,14 +27,15 @@
 			<div class="nav-wrapper container">
 				<a href="#" class="brand-logo center teal-text text-darken-4">139</a>
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><router-link to="/tasks" class="teal-text text-darken-4">Task List</router-link></li>
 					<li><a href="#"><i class="material-icons teal-text text-darken-4">settings</i></a></li>
 					<li><a href="#" class="teal-text text-darken-4">Logout</a></li>
 				</ul>
 			</div>
 		</nav>
 		
-		<main class="container">			
-			<task-list-container :user-name="userName"></task-list-container>
+		<main class="container">
+			<router-view :user-name="userName"></router-view>
 		</main>
 	</div>
 </body>
@@ -91,7 +93,6 @@
 </template>
 
 
-
 <script type="text/javascript">
 	Vue.component('task', {
 		props: ['task', 'updateTaskListStatus'],
@@ -108,7 +109,7 @@
 		}
 	})
 
-	Vue.component('task-list-container', {
+	var TaskListComponent = Vue.component('task-list-container', {
 		props: ['userName'],
 		template: '#task-list-container-template',
 		data: function() {
@@ -193,12 +194,20 @@
 		template: '#task-list-template'
 	})
 
+	const routes = [
+		{ path: '/tasks', component: TaskListComponent }
+	]
+	const router = new VueRouter({
+		routes: routes
+	})
+
 	var app = new Vue({
 		el: '#app139',
+		router,
 		data: {
 			userName: "Lucas",
 		}
-	})
+	}).$mount('#app139')
 </script>
 
 </html>
