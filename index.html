@@ -27,16 +27,16 @@
 			<div class="nav-wrapper container">
 				<a href="#" class="brand-logo center teal-text text-darken-4">139</a>
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
-					<li><router-link to="/login" class="teal-text text-darken-4">Sign In</router-link></li>
-					<li><router-link to="/tasks" class="teal-text text-darken-4">Task List</router-link></li>
-					<li><a href="#" class="teal-text text-darken-4">Settings</a></li>
-					<li><a href="#" class="teal-text text-darken-4">Logout</a></li>
+					<li v-if="!logged"><router-link to="/login" class="teal-text text-darken-4">Sign In</router-link></li>
+					<li v-if="logged"><router-link to="/tasks" class="teal-text text-darken-4">Task List</router-link></li>
+					<li v-if="logged"><a href="#" class="teal-text text-darken-4">Settings</a></li>
+					<li v-if="logged"><a href="#" class="teal-text text-darken-4">Logout</a></li>
 				</ul>
 			</div>
 		</nav>
 		
 		<main class="container">
-			<router-view :user-name="userName"></router-view>
+			<router-view :user-name="userInfo.userName" :populate-user-info="populateUserInfo"></router-view>
 		</main>
 	</div>
 </body>
@@ -106,19 +106,19 @@
 			<form class="col s12">			
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="email" type="email" class="validate">
+						<input id="email" type="email" class="validate" v-model="email">
 						<label for="email">Email</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="password" type="password" class="validate">
+						<input id="password" type="password" class="validate" v-model="password">
 						<label for="password">Password</label>
 					</div>
 				</div>
 			</form>
 		</div>
-		<router-link to="/tasks" class="waves-effect waves-light btn teal darken-4">Sign In</router-link>
+		<a v-on:click="performUserLogin()" class="waves-effect waves-light btn teal darken-4">Sign In</a>
 	</div>	
 </template>
 
@@ -225,7 +225,28 @@
 	})
 
 	var LoginComponent = Vue.component('login-page', {
-		template: '#login-page-template'
+		props: ['populateUserInfo'],
+		template: '#login-page-template',
+		data: function () {
+			return {
+				email: null,
+				password: null,
+			}
+		},
+		methods: {
+			performUserLogin: function () {
+				// validate email.value and password.value, return to userInfo
+				var userInfo = {
+					userEmail: "lucas@lasobrinho.com",
+					userName: "Lucas"
+					// ...
+				}
+				if (true) {
+					this.populateUserInfo(userInfo)
+					router.push({ path: '/tasks' })
+				}
+			}
+		}
 	})
 
 	const routes = [
@@ -240,7 +261,14 @@
 		el: '#app139',
 		router,
 		data: {
-			userName: "Lucas",
+			logged: false,
+			userInfo: {}
+		},
+		methods: {
+			populateUserInfo: function(userInfo) {
+				this.userInfo = userInfo
+				this.logged = true
+			}
 		}
 	}).$mount('#app139')
 </script>
