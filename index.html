@@ -30,7 +30,7 @@
 					<li v-if="!logged"><router-link to="/login" class="teal-text text-darken-4">Sign In</router-link></li>
 					<li v-if="logged"><router-link to="/tasks" class="teal-text text-darken-4">Task List</router-link></li>
 					<li v-if="logged"><a href="#" class="teal-text text-darken-4">Settings</a></li>
-					<li v-if="logged"><a href="#" class="teal-text text-darken-4">Logout</a></li>
+					<li v-if="logged"><a v-on:click="performUserLogout()" class="teal-text text-darken-4">Logout</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -230,15 +230,17 @@
 		data: function () {
 			return {
 				email: null,
-				password: null,
+				password: null
 			}
 		},
 		methods: {
 			performUserLogin: function () {
 				// validate email.value and password.value, return to userInfo
+				// perform login operations in the RESTful API
 				var userInfo = {
+					userID: "3a761bd9",
 					userEmail: "lucas@lasobrinho.com",
-					userName: "Lucas"
+					userName: "Lucas",
 					// ...
 				}
 				if (true) {
@@ -265,9 +267,15 @@
 			userInfo: {}
 		},
 		methods: {
-			populateUserInfo: function(userInfo) {
+			populateUserInfo: function (userInfo) {
 				this.userInfo = userInfo
 				this.logged = true
+			},
+			performUserLogout: function () {
+				// perform logout operations in the RESTful API
+				this.userInfo = {}
+				this.logged = false
+				router.push({ path: '/' })
 			}
 		}
 	}).$mount('#app139')
