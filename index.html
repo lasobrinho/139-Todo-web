@@ -28,7 +28,8 @@
 				<a href="#" class="brand-logo center teal-text text-darken-4">139</a>
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
 					<li v-if="!logged" v-bind:class="{ active: isPageActive('login') }"><router-link to="/login" class="teal-text text-darken-4">Sign In</router-link></li>
-					<li v-if="logged" v-bind:class="{ active: isPageActive('tasks') }"><router-link to="/tasks" class="teal-text text-darken-4">Task List</router-link></li>
+					<li v-if="logged" v-bind:class="{ active: isPageActive('tasks') }"><router-link to="/tasks" class="teal-text text-darken-4">Tasks</router-link></li>
+					<li v-if="logged" v-bind:class="{ active: isPageActive('editTaskList') }"><router-link to="/editTaskList" class="teal-text text-darken-4">Edit Task List</router-link></li>
 					<li v-if="logged" v-bind:class="{ active: isPageActive('settings') }"><a href="#" class="teal-text text-darken-4">Settings</a></li>
 					<li v-if="logged"><a v-on:click="performUserLogout()" class="teal-text text-darken-4">Logout</a></li>
 				</ul>
@@ -41,6 +42,7 @@
 	</div>
 </body>
 
+<!-- Single task template -->
 <template id="task-template">
 	<div class="row">
 		<div class="col s12">
@@ -51,6 +53,7 @@
 	</div>
 </template>
 
+<!-- Task list header template -->
 <template id="task-list-header-template">
 	<div>
 		<div class="row"></div>
@@ -62,6 +65,7 @@
 	</div>
 </template>
 
+<!-- Task list template -->
 <template id="task-list-template">
 	<div>
 		<h3 class="center">{{ listTitle }}</h3>
@@ -78,6 +82,7 @@
 	</div>
 </template>
 
+<!-- Task list container template -->
 <template id="task-list-container-template">
 	<div>
 		<task-list-header :user-name="userName"></task-list-header>
@@ -93,6 +98,7 @@
 	</div>
 </template>
 
+<!-- Login template -->
 <template id="login-page-template">
 	<div>
 		<div class="row"></div>
@@ -120,6 +126,88 @@
 		</div>
 		<a v-on:click="performUserLogin()" class="waves-effect waves-light btn teal darken-4">Sign In</a>
 	</div>	
+</template>
+
+<template id="edit-task-list-template">
+	<div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="col s12">
+				<h4>Edit Task List</h4>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="input-field col s8">
+				<input v-model="taskText" id="task_description" type="text">
+				<label for="first_name">Task Description</label>
+			</div>
+			<div class="input-field col s3">
+				<select v-select="taskPriority">
+					<option value="" disabled selected>Select a priority</option>
+					<option value="1">1</option>
+					<option value="3">3</option>
+					<option value="9">9</option>
+					<option value="0">No priority</option>
+				</select>
+				<label>Priority</label>
+			</div>
+			<div class="input-field col s1">
+				<a v-on:click="addTask()" class="btn-floating waves-effect waves-light green"><i class="material-icons">add</i></a>
+			</div>
+		</div>
+
+		<div class="row"></div>
+		<div class="row">
+			<div class="col s12">
+				<h4>Task List</h4>
+			</div>
+		</div>
+
+		<!-- Implement edit button -->
+
+		<h5>1</h5>
+		<ul class="collection">
+			<li v-for="task in taskLists.tasks1" class="collection-item">
+				<div>
+					{{ task.text }}
+					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
+				</div>
+			</li>
+		</ul>
+
+		<h5>3</h5>
+		<ul class="collection">
+			<li v-for="task in taskLists.tasks3" class="collection-item">
+				<div>
+					{{ task.text }}
+					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
+				</div>
+			</li>
+		</ul>
+
+		<h5>9</h5>
+		<ul class="collection">
+			<li v-for="task in taskLists.tasks9" class="collection-item">
+				<div>
+					{{ task.text }}
+					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
+				</div>
+			</li>
+		</ul>
+
+		<h5>Other Tasks</h5>
+		<ul class="collection">
+			<li v-for="task in taskLists.tasks0" class="collection-item">
+				<div>
+					{{ task.text }}
+					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
+				</div>
+			</li>
+		</ul>
+
+	</div>
+
 </template>
 
 
@@ -257,12 +345,64 @@
 		}
 	})
 
+	var EditTaskListComponent = Vue.component('edit-task-list', {
+		props: ['updateActivePage'],
+		template: '#edit-task-list-template',
+		data: function () {
+			return {
+				taskText: '',
+				taskPriority: '',
+				taskLists: {
+					tasks1: [],
+					tasks3: [],
+					tasks9: [],
+					tasks0: []
+				},
+				taskListsMapping: {
+					'1': 'tasks1',
+					'3': 'tasks3',
+					'9': 'tasks9',
+					'0': 'tasks0'
+				}
+			}
+		},
+		methods: {
+			addTask: function () {
+				this.taskLists[this.taskListsMapping[this.taskPriority]].push({ id: Math.random(), text: this.taskText, isCompleted: false, priority: this.taskPriority })
+			}
+		},
+		mounted: function () {
+			this.updateActivePage("editTaskList")
+		}
+	})
+
 	const routes = [
-		{ path: '/tasks', component: TaskListComponent },
-		{ path: '/login', component: LoginComponent}
+		{ path: '/tasks', component: TaskListComponent }, 
+		{ path: '/login', component: LoginComponent }, 
+		{ path: '/editTaskList', component: EditTaskListComponent }
 	]
 	const router = new VueRouter({
 		routes: routes
+	})
+
+	Vue.directive("select", {
+		"twoWay": true,
+
+		update: function(el, binding, vnode) {
+			if(!vnode.elm.dataset.vueSelectReady) {
+
+				$(el).on('change', function() {
+					vnode.context.$set(vnode.context, binding.expression, el.value)
+				})
+
+				$(el).material_select()
+				vnode.elm.dataset.vueSelectReady = true
+			}
+		},
+
+		unbind: function(el, binding, vnode) {
+			$(el).material_select('destroy')
+		}
 	})
 
 	var app = new Vue({
@@ -270,6 +410,7 @@
 		router,
 		data: {
 			logged: false,
+			firstLogin: false,
 			userInfo: {},
 			activePage: ""
 		},
@@ -296,6 +437,13 @@
 			}
 		}
 	}).$mount('#app139')
+
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('select').material_select();
+	});
 </script>
 
 </html>
