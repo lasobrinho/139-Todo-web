@@ -164,13 +164,10 @@
 			</div>
 		</div>
 
-		<!-- Implement edit button -->
-
-		<edit-task-collection collection-title="1" :task-list="taskLists.tasks1"></edit-task-collection>
-		<edit-task-collection collection-title="3" :task-list="taskLists.tasks3"></edit-task-collection>
-		<edit-task-collection collection-title="9" :task-list="taskLists.tasks9"></edit-task-collection>
-		<edit-task-collection collection-title="Other Tasks" :task-list="taskLists.tasks0"></edit-task-collection>
-		
+		<edit-task-collection collection-title="1" :task-list="taskLists.tasks1" :delete-task="deleteTask"></edit-task-collection>
+		<edit-task-collection collection-title="3" :task-list="taskLists.tasks3" :delete-task="deleteTask"></edit-task-collection>
+		<edit-task-collection collection-title="9" :task-list="taskLists.tasks9" :delete-task="deleteTask"></edit-task-collection>
+		<edit-task-collection collection-title="Other Tasks" :task-list="taskLists.tasks0" :delete-task="deleteTask"></edit-task-collection>
 
 	</div>
 
@@ -183,7 +180,7 @@
 			<li v-for="task in taskList" class="collection-item">
 				<div>
 					{{ task.text }}
-					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
+					<a v-on:click="deleteTask(task)" class="secondary-content"><i class="material-icons grey-text text-darken-2">delete</i></a>
 				</div>
 			</li>
 		</ul>
@@ -194,7 +191,7 @@
 <script type="text/javascript">
 
 	Vue.component('edit-task-collection', {
-		props: ['collectionTitle', 'taskList'],
+		props: ['collectionTitle', 'taskList', 'deleteTask'],
 		template: '#edit-task-collection-template'
 	})
 
@@ -355,6 +352,13 @@
 		methods: {
 			addTask: function () {
 				this.taskLists[this.taskListsMapping[this.taskPriority]].push({ id: Math.random(), text: this.taskText, isCompleted: false, priority: this.taskPriority })
+			},
+			deleteTask: function (task) {
+				var taskList = this.taskLists[this.taskListsMapping[task.priority]]
+				var index = taskList.indexOf(task)
+				if (index > -1) {
+					taskList.splice(index, 1)
+				}
 			}
 		},
 		mounted: function () {
