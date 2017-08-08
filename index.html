@@ -166,52 +166,38 @@
 
 		<!-- Implement edit button -->
 
-		<h5>1</h5>
-		<ul class="collection">
-			<li v-for="task in taskLists.tasks1" class="collection-item">
-				<div>
-					{{ task.text }}
-					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
-				</div>
-			</li>
-		</ul>
-
-		<h5>3</h5>
-		<ul class="collection">
-			<li v-for="task in taskLists.tasks3" class="collection-item">
-				<div>
-					{{ task.text }}
-					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
-				</div>
-			</li>
-		</ul>
-
-		<h5>9</h5>
-		<ul class="collection">
-			<li v-for="task in taskLists.tasks9" class="collection-item">
-				<div>
-					{{ task.text }}
-					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
-				</div>
-			</li>
-		</ul>
-
-		<h5>Other Tasks</h5>
-		<ul class="collection">
-			<li v-for="task in taskLists.tasks0" class="collection-item">
-				<div>
-					{{ task.text }}
-					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
-				</div>
-			</li>
-		</ul>
+		<edit-task-collection collection-title="1" :task-list="taskLists.tasks1"></edit-task-collection>
+		<edit-task-collection collection-title="3" :task-list="taskLists.tasks3"></edit-task-collection>
+		<edit-task-collection collection-title="9" :task-list="taskLists.tasks9"></edit-task-collection>
+		<edit-task-collection collection-title="Other Tasks" :task-list="taskLists.tasks0"></edit-task-collection>
+		
 
 	</div>
 
 </template>
 
+<template id="edit-task-collection-template">
+	<div>
+		<h5 class="center">{{ collectionTitle }}</h5>
+		<ul class="collection">
+			<li v-for="task in taskList" class="collection-item">
+				<div>
+					{{ task.text }}
+					<a href="#!" class="secondary-content"><i class="material-icons grey-text text-darken-2">edit</i></a>
+				</div>
+			</li>
+		</ul>
+	</div>
+</template>
+
 
 <script type="text/javascript">
+
+	Vue.component('edit-task-collection', {
+		props: ['collectionTitle', 'taskList'],
+		template: '#edit-task-collection-template'
+	})
+
 	Vue.component('task', {
 		props: ['task', 'updateTaskListStatus'],
 		template: '#task-template',
