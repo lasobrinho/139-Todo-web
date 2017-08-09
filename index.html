@@ -29,7 +29,7 @@
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
 					<li v-if="!logged" v-bind:class="{ active: isPageActive('login') }"><router-link to="/login" class="teal-text text-darken-4">Sign In</router-link></li>
 					<li v-if="logged" v-bind:class="{ active: isPageActive('tasks') }"><router-link to="/tasks" class="teal-text text-darken-4">Tasks</router-link></li>
-					<li v-if="logged" v-bind:class="{ active: isPageActive('editTaskList') }"><router-link to="/editTaskList" class="teal-text text-darken-4">Edit Task List</router-link></li>
+					<li v-if="logged" v-bind:class="{ active: isPageActive('createTaskList') }"><router-link to="/createTaskList" class="teal-text text-darken-4">Create Task List</router-link></li>
 					<li v-if="logged" v-bind:class="{ active: isPageActive('settings') }"><a href="#" class="teal-text text-darken-4">Settings</a></li>
 					<li v-if="logged"><a v-on:click="performUserLogout()" class="teal-text text-darken-4">Logout</a></li>
 				</ul>
@@ -128,54 +128,6 @@
 	</div>	
 </template>
 
-<template id="edit-task-list-template">
-	<div>
-		<div class="row"></div>
-		<div class="row">
-			<div class="col s12">
-				<h4>Edit Task List</h4>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="input-field col s8">
-				<input v-model="taskText" id="task_description" type="text">
-				<label for="first_name">Task Description</label>
-			</div>
-			<div class="input-field col s3">
-				<select v-select="taskPriority">
-					<option value="" disabled selected>Select a priority</option>
-					<option value="1">1</option>
-					<option value="3">3</option>
-					<option value="9">9</option>
-					<option value="0">No priority</option>
-				</select>
-				<label>Priority</label>
-			</div>
-			<div class="input-field col s1">
-				<a v-on:click="addTask()" class="btn-floating waves-effect waves-light green"><i class="material-icons">add</i></a>
-			</div>
-		</div>
-
-		<div class="row"></div>
-		<div class="row">
-			<div class="col s12">
-				<h4>Task List</h4>
-			</div>
-		</div>
-
-		<!-- Implement edit button -->
-
-		<edit-task-collection collection-title="1" :task-list="taskLists.tasks1"></edit-task-collection>
-		<edit-task-collection collection-title="3" :task-list="taskLists.tasks3"></edit-task-collection>
-		<edit-task-collection collection-title="9" :task-list="taskLists.tasks9"></edit-task-collection>
-		<edit-task-collection collection-title="Other Tasks" :task-list="taskLists.tasks0"></edit-task-collection>
-		
-
-	</div>
-
-</template>
-
 <template id="edit-task-collection-template">
 	<div>
 		<h5 class="center">{{ collectionTitle }}</h5>
@@ -190,13 +142,118 @@
 	</div>
 </template>
 
+<template id="create-task-list-template">
+	<div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="col s12">
+				<h4>Today's Task List</h4>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="input-field col s9">
+				<input v-model="task.text" id="task_description" type="text">
+				<label for="first_name">Task Description</label>
+			</div>
+			<div class="input-field col s2">
+				<span class="priority-select priority-1" v-bind:class="{ 'priority-disabled': isPriorityNotSelected('1') || isPriorityListFull('1') }" v-on:click="task.priority='1'">1</span>
+				<span class="priority-select priority-3" v-bind:class="{ 'priority-disabled': isPriorityNotSelected('3') || isPriorityListFull('3') }" v-on:click="task.priority='3'">3</span>
+				<span class="priority-select priority-9" v-bind:class="{ 'priority-disabled': isPriorityNotSelected('9') || isPriorityListFull('9') }" v-on:click="task.priority='9'">9</span>
+				<span class="priority-select priority-0" v-bind:class="{ 'priority-disabled': disableOtherTasks() }" v-on:click="task.priority='0'">Other</span>
+			</div>			
+			<div class="input-field col s1">
+				<a v-on:click="addTask()" class="btn-floating waves-effect waves-light green" v-bind:class="{ disabled: validateTask() }"><i class="material-icons">add</i></a>
+			</div>
+		</div>
+
+		<edit-task-collection collection-title="1" :task-list="taskLists.tasks1"></edit-task-collection>
+		<edit-task-collection collection-title="3" :task-list="taskLists.tasks3"></edit-task-collection>
+		<edit-task-collection collection-title="9" :task-list="taskLists.tasks9"></edit-task-collection>
+		<edit-task-collection collection-title="Other Tasks" :task-list="taskLists.tasks0"></edit-task-collection>
+
+	</div>
+</template>
+
 
 <script type="text/javascript">
 
+	var CreateTaskList = Vue.component('create-task-list', {
+		props: ['updateActivePage'],
+		template: '#create-task-list-template',
+		data: function () {
+			return {
+				task: {
+					id: 0, 
+					text: '', 
+					isCompleted: false, 
+					priority: ''
+				},
+				tasks: [],
+				taskLists: {
+					tasks1: [],
+					tasks3: [],
+					tasks9: [],
+					tasks0: []
+				},
+				taskListsMapping: {
+					'1': 'tasks1',
+					'3': 'tasks3',
+					'9': 'tasks9',
+					'0': 'tasks0'
+				}
+			}
+		},
+		methods: {
+			resetTask: function () {
+				this.task = {
+					id: 0, 
+					text: '', 
+					isCompleted: false, 
+					priority: ''
+				}
+			},
+			addTask: function () {
+				this.task.id = Math.random()
+				this.taskLists[this.taskListsMapping[this.task.priority]].push(this.task)
+				this.resetTask()
+			},
+			isPriorityNotSelected: function (priority) {
+				if (this.task.priority == '') {
+					return false
+				}
+				return !(this.task.priority == priority)
+			},
+			isPriorityListFull: function (priority) {
+				if (this.taskLists[this.taskListsMapping[priority]].length == parseInt(priority)) {
+					return true
+				}
+				return false
+			},
+			disableOtherTasks: function () {
+				if (this.isPriorityListFull('1') && this.isPriorityListFull('3') && this.isPriorityListFull('9')) {
+					return false
+				}
+				return true
+			},
+			validateTask: function () {
+				if (this.task.text == '' || this.task.priority == '') {
+					return true
+				}
+				return false
+			}
+		},
+		mounted: function () {
+			this.updateActivePage("createTaskList")
+		}
+	})
+
+	
 	Vue.component('edit-task-collection', {
 		props: ['collectionTitle', 'taskList'],
 		template: '#edit-task-collection-template'
 	})
+	
 
 	Vue.component('task', {
 		props: ['task', 'updateTaskListStatus'],
@@ -331,64 +388,13 @@
 		}
 	})
 
-	var EditTaskListComponent = Vue.component('edit-task-list', {
-		props: ['updateActivePage'],
-		template: '#edit-task-list-template',
-		data: function () {
-			return {
-				taskText: '',
-				taskPriority: '',
-				taskLists: {
-					tasks1: [],
-					tasks3: [],
-					tasks9: [],
-					tasks0: []
-				},
-				taskListsMapping: {
-					'1': 'tasks1',
-					'3': 'tasks3',
-					'9': 'tasks9',
-					'0': 'tasks0'
-				}
-			}
-		},
-		methods: {
-			addTask: function () {
-				this.taskLists[this.taskListsMapping[this.taskPriority]].push({ id: Math.random(), text: this.taskText, isCompleted: false, priority: this.taskPriority })
-			}
-		},
-		mounted: function () {
-			this.updateActivePage("editTaskList")
-		}
-	})
-
 	const routes = [
 		{ path: '/tasks', component: TaskListComponent }, 
 		{ path: '/login', component: LoginComponent }, 
-		{ path: '/editTaskList', component: EditTaskListComponent }
+		{ path: '/createTaskList', component: CreateTaskList }
 	]
 	const router = new VueRouter({
 		routes: routes
-	})
-
-	Vue.directive("select", {
-		"twoWay": true,
-
-		update: function(el, binding, vnode) {
-			if(!vnode.elm.dataset.vueSelectReady) {
-
-				$(el).on('change', function() {
-					vnode.context.$set(vnode.context, binding.expression, el.value)
-				})
-
-				$(el).material_select()
-				vnode.elm.dataset.vueSelectReady = true
-			}
-		},
-
-		unbind: function(el, binding, vnode) {
-			$(el).material_select('destroy')
-		}
 	})
 
 	var app = new Vue({
@@ -424,12 +430,6 @@
 		}
 	}).$mount('#app139')
 
-</script>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('select').material_select();
-	});
 </script>
 
 </html>
