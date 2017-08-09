@@ -250,7 +250,7 @@
 
 	
 	Vue.component('edit-task-collection', {
-		props: ['collectionTitle', 'taskList'],
+		props: ['collectionTitle', 'taskList', 'deleteTask'],
 		template: '#edit-task-collection-template'
 	})
 	
@@ -393,6 +393,7 @@
 		{ path: '/login', component: LoginComponent }, 
 		{ path: '/createTaskList', component: CreateTaskList }
 	]
+
 	const router = new VueRouter({
 		routes: routes
 	})
