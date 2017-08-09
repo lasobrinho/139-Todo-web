@@ -103,3 +103,28 @@ span[id^="task-"]:hover {
 	color: #999;
 }
 
+.priority-select {
+	margin-right: 10px;
+	font-weight: 600;
+	font-size: 1.5rem;
+}
+
+.priority-1 {
+	color: #0277bd;
+}
+
+.priority-3 {
+	color: #f57c00;
+}
+
+.priority-9 {
+	color: #512da8;
+}
+
+.priority-0 {
+	color: #455a64;
+}
+
+.priority-disabled {
+	color: #e0e0e0;
+}
