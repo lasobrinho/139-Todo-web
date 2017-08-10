@@ -252,6 +252,9 @@
 			},
 			setTaskPriority: function (task, priority) {
 				// check edit mode, compare old priority with new one, update lists accordingly
+				if (this.isPriorityListFull(priority)) {
+					return
+				}
 				if (this.taskAction.edit) {
 					if (task.priority != priority) {
 						var tempTask = task
