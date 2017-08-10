@@ -109,6 +109,10 @@ span[id^="task-"]:hover {
 	font-size: 1.5rem;
 }
 
+.priority-selected {
+	text-decoration: underline;
+}
+
 .priority-1 {
 	color: #0277bd;
 }
@@ -127,4 +131,5 @@ span[id^="task-"]:hover {
 
 .priority-disabled {
 	color: #e0e0e0;
+	text-decoration: line-through;
 }
