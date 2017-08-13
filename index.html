@@ -30,6 +30,7 @@
 					<li v-if="!logged" v-bind:class="{ active: isPageActive('login') }"><router-link to="/login" class="teal-text text-darken-4">Sign In</router-link></li>
 					<li v-if="logged" v-bind:class="{ active: isPageActive('tasks') }"><router-link to="/tasks" class="teal-text text-darken-4">Tasks</router-link></li>
 					<li v-if="logged" v-bind:class="{ active: isPageActive('createTaskList') }"><router-link to="/createTaskList" class="teal-text text-darken-4">Create Task List</router-link></li>
+					<li v-if="logged" v-bind:class="{ active: isPageActive('createTaskListAll') }"><router-link to="/createTaskListAll" class="teal-text text-darken-4">Create Task List All</router-link></li>
 					<li v-if="logged" v-bind:class="{ active: isPageActive('settings') }"><a href="#" class="teal-text text-darken-4">Settings</a></li>
 					<li v-if="logged"><a v-on:click="performUserLogout()" class="teal-text text-darken-4">Logout</a></li>
 				</ul>
@@ -128,15 +129,15 @@
 	</div>	
 </template>
 
-<template id="edit-task-collection-template">
+<template id="task-collection-template">
 	<div>
-		<h5 class="center">{{ collectionTitle }}</h5>
+		<h5 class="center">{{ taskListTitle }}</h5>
 		<ul class="collection">
 			<li v-for="task in taskList" class="collection-item">
 				<div>
 					{{ task.text }}
-					<a v-on:click="editTask(task)" class="secondary-content"><i class="material-icons orange-text text-darken-2">edit</i></a>
 					<a v-on:click="deleteTask(task)" class="secondary-content"><i class="material-icons red-text text-darken-2">delete</i></a>
+					<a v-on:click="editTask(task)" class="secondary-content"><i class="material-icons orange-text text-darken-2">edit</i></a>
 				</div>
 			</li>
 		</ul>
@@ -169,10 +170,53 @@
 			</div>
 		</div>
 
-		<edit-task-collection collection-title="1" :task-list="taskLists.tasks1" :edit-task="editTask" :delete-task="deleteTask"></edit-task-collection>
-		<edit-task-collection collection-title="3" :task-list="taskLists.tasks3" :edit-task="editTask" :delete-task="deleteTask"></edit-task-collection>
-		<edit-task-collection collection-title="9" :task-list="taskLists.tasks9" :edit-task="editTask" :delete-task="deleteTask"></edit-task-collection>
-		<edit-task-collection collection-title="Other Tasks" :task-list="taskLists.tasks0" :edit-task="editTask" :delete-task="deleteTask"></edit-task-collection>
+		<task-collection task-list-title="1" :task-list="taskLists.tasks1" :edit-task="editTask" :delete-task="deleteTask"></task-collection>
+		<task-collection task-list-title="3" :task-list="taskLists.tasks3" :edit-task="editTask" :delete-task="deleteTask"></task-collection>
+		<task-collection task-list-title="9" :task-list="taskLists.tasks9" :edit-task="editTask" :delete-task="deleteTask"></task-collection>
+		<task-collection task-list-title="Other Tasks" :task-list="taskLists.tasks0" :edit-task="editTask" :delete-task="deleteTask"></task-collection>
+
+	</div>
+</template>
+
+<template id="create-task-list-all-template">
+	<div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="col s12">
+				<h4 class="center">Today's Task List</h4>
+			</div>
+		</div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="col s12">
+				<h5>Add New Tasks</h5>
+				<p>List all the new tasks you have to complete, regardless of their priorities</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="input-field col s11">
+				<input v-model="task.text" id="task_description" type="text">
+				<label for="first_name">Task Description</label>
+			</div>			
+			<div class="input-field col s1 center">
+				<a v-if="taskAction.add" v-on:click="addTask()" class="btn-floating waves-effect waves-light green" v-bind:class="{ disabled: validateTask() }"><i class="material-icons">add</i></a>
+				<a v-if="taskAction.edit" v-on:click="finishEditTask()" class="btn-floating waves-effect waves-light orange" v-bind:class="{ disabled: validateTask() }"><i class="material-icons">edit</i></a>
+			</div>
+		</div>
+
+		<task-collection task-list-title="New Tasks" :task-list="tasks" :edit-task="editTask" :delete-task="deleteTask"></task-collection>
+
+
+		<div class="row"></div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="col s12">
+				<h5>Your Pending Tasks</h5>
+				<p>Tasks that you added before but are still pending to be completed</p>
+			</div>
+		</div>
+
+		<task-collection task-list-title="Pending Tasks" :task-list="pendingTasks" :edit-task="editTask" :delete-task="deleteTask"></task-collection>
 
 	</div>
 </template>
@@ -251,7 +295,6 @@
 				}
 			},
 			setTaskPriority: function (task, priority) {
-				// check edit mode, compare old priority with new one, update lists accordingly
 				if (this.isPriorityListFull(priority)) {
 					return
 				}
@@ -296,10 +339,98 @@
 		}
 	})
 
+	var CreateTaskListAll = Vue.component('create-task-list-all', {
+		props: ['updateActivePage'],
+		template: '#create-task-list-all-template',
+		data: function () {
+			return {
+				task: {
+					id: 0, 
+					text: '', 
+					isCompleted: false, 
+					priority: ''
+				},
+				tasks: [],
+				pendingTasks: [
+					{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1' },
+					{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3' },
+					{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3' },
+					{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3' },
+					{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9' },
+					{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9' },
+					{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
+					{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
+					{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
+					{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9' },
+					{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
+					{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
+					{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
+					{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0' },
+					{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0' },
+					{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0' },
+					{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0' },
+				],
+				taskAction: {
+					'add': true,
+					'edit': false
+				}
+			}
+		},
+		methods: {
+			setTaskAction: function (taskAction) {
+				if (taskAction == 'add') {
+					this.taskAction = { 'add': true, 'edit': false }
+				}
+				if (taskAction == 'edit') {
+					this.taskAction = { 'add': false, 'edit': true }
+				}
+			},
+			resetTask: function () {
+				this.task = {
+					id: 0, 
+					text: '', 
+					isCompleted: false, 
+					priority: ''
+				}
+			},
+			addTask: function () {
+				this.task.id = Math.random()
+				this.tasks.push(this.task)
+				this.resetTask()
+			},
+			addTaskToNewList: function (task) {
+				this.tasks.push(task)
+			},
+			editTask: function (task) {
+				this.setTaskAction('edit')
+				this.task = task
+			},
+			finishEditTask: function () {
+				this.resetTask()
+				this.setTaskAction('add')
+			},
+			deleteTask: function (task) {
+				var taskList = this.tasks
+				var index = taskList.indexOf(task);
+				if (index > -1) {
+					taskList.splice(index, 1);
+				}
+			},
+			validateTask: function () {
+				if (this.task.text == '') {
+					return true
+				}
+				return false
+			}
+		},
+		mounted: function () {
+			this.updateActivePage("createTaskListAll")
+		}
+	})
 	
-	Vue.component('edit-task-collection', {
-		props: ['collectionTitle', 'taskList', 'editTask', 'deleteTask'],
-		template: '#edit-task-collection-template'
+	Vue.component('task-collection', {
+		props: ['taskListTitle', 'taskList', 'editTask', 'deleteTask'],
+		template: '#task-collection-template'
 	})
 	
 
@@ -427,7 +558,7 @@
 				}
 				if (true) {
 					this.populateUserInfo(userInfo)
-					router.push({ path: '/tasks' })
+					router.push({ path: '/createTaskListAll' })
 				}
 			}
 		},
@@ -439,7 +570,8 @@
 	const routes = [
 		{ path: '/tasks', component: TaskListComponent }, 
 		{ path: '/login', component: LoginComponent }, 
-		{ path: '/createTaskList', component: CreateTaskList }
+		{ path: '/createTaskList', component: CreateTaskList },
+		{ path: '/createTaskListAll', component: CreateTaskListAll },
 	]
 
 	const router = new VueRouter({
