@@ -150,3 +150,8 @@ span[id^="task-"]:hover {
 .task-collection-secondary {
 	font-size: 12px;
 }
+
+.btn-flat {
+	padding-left: 20px;
+	padding-right: 5px;
+}
