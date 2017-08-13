@@ -133,3 +133,20 @@ span[id^="task-"]:hover {
 	color: #e0e0e0;
 	text-decoration: line-through;
 }
+
+.task-collection-li {
+	padding-top: 5px !important;
+	padding-bottom: 5px !important;
+}
+
+.task-collection-row {
+	margin-bottom: 0px;
+}
+
+.task-collection-main {
+
+}
+
+.task-collection-secondary {
+	font-size: 12px;
+}

@@ -133,11 +133,27 @@
 	<div>
 		<h5 class="center">{{ taskListTitle }}</h5>
 		<ul class="collection">
-			<li v-for="task in taskList" class="collection-item">
+			<li v-for="task in taskList" class="collection-item task-collection-li">
 				<div>
-					{{ task.text }}
-					<a v-on:click="deleteTask(task)" class="secondary-content"><i class="material-icons red-text text-darken-2">delete</i></a>
-					<a v-on:click="editTask(task)" class="secondary-content"><i class="material-icons orange-text text-darken-2">edit</i></a>
+					<div class="row task-collection-row task-collection-main">
+						<div class="col s9">
+							{{ task.text }}
+						</div>
+						<div class="col s3">
+							<a v-on:click="deleteTask(task)" class="secondary-content">&nbsp Delete</a>
+							<a v-on:click="editTask(task)" class="secondary-content">Edit &nbsp |</a>
+						</div>
+					</div>
+					<div v-if="task.priority" class="row task-collection-row task-collection-secondary">
+						<div class="col s12">
+							<span class="grey-text text-darken-1">Added on {{ task.dateAdded }} &nbsp · &nbsp Previous priority: {{ task.priority }}</span>
+						</div>
+					</div>	
+					<div v-else class="row task-collection-row task-collection-secondary">
+						<div class="col s12">
+							<span class="grey-text text-darken-1">New</span>
+						</div>
+					</div>			
 				</div>
 			</li>
 		</ul>
@@ -223,6 +239,11 @@
 
 
 <script type="text/javascript">
+
+	function getCurrentDate() {
+		var date = new Date()
+		return date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear()
+	}
 
 	var CreateTaskList = Vue.component('create-task-list', {
 		props: ['updateActivePage'],
@@ -348,27 +369,28 @@
 					id: 0, 
 					text: '', 
 					isCompleted: false, 
-					priority: ''
+					priority: '',
+					dateAdded: ''
 				},
 				tasks: [],
 				pendingTasks: [
-					{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1' },
-					{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3' },
-					{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3' },
-					{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3' },
-					{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9' },
-					{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9' },
-					{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
-					{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
-					{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
-					{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9' },
-					{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
-					{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
-					{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
-					{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0' },
-					{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0' },
-					{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0' },
-					{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0' },
+					{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1', dateAdded: getCurrentDate() },
+					{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
+					{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
+					{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
+					{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+					{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+					{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+					{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+					{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+					{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+					{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+					{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+					{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+					{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+					{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+					{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+					{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
 				],
 				taskAction: {
 					'add': true,
@@ -390,7 +412,8 @@
 					id: 0, 
 					text: '', 
 					isCompleted: false, 
-					priority: ''
+					priority: '',
+					dateAdded: ''
 				}
 			},
 			addTask: function () {
@@ -410,11 +433,15 @@
 				this.setTaskAction('add')
 			},
 			deleteTask: function (task) {
-				var taskList = this.tasks
+				if (task.priority) {
+					var taskList = this.pendingTasks
+				} else {
+					var taskList = this.tasks
+				}
 				var index = taskList.indexOf(task);
 				if (index > -1) {
 					taskList.splice(index, 1);
-				}
+				}				
 			},
 			validateTask: function () {
 				if (this.task.text == '') {
@@ -457,29 +484,29 @@
 				activeList: '1',
 				taskLists: {
 					tasks1: [
-						{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1' },
+						{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1', dateAdded: getCurrentDate() },
 					],
 					tasks3: [
-						{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3' },
-						{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3' },
-						{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3' },
+						{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
+						{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
+						{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
 					],
 					tasks9: [
-						{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9' },
-						{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9' },
-						{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
-						{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
-						{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
-						{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9' },
-						{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9' },
-						{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9' },
-						{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9' },
+						{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+						{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+						{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+						{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+						{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+						{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+						{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+						{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+						{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
 					],
 					tasks0: [
-						{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0' },
-						{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0' },
-						{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0' },
-						{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0' },
+						{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+						{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+						{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+						{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
 					],
 				},
 			}
