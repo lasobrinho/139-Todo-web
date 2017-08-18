@@ -264,6 +264,40 @@
 			<task-collection task-list-title="1" :task-list="allTasks" :edit-task="editTask" :delete-task="deleteTask" :selected-task-id="selectedTaskId" :selected-tasks="selectedTasks"></task-collection>
 		</div>
 
+		<div v-if="editTaskListStep == '3'">
+			<div class="row"></div>
+			<div class="row">
+				<div class="col s9">
+					<h5>3</h5>
+					<p>Select three task that are of medium priority for today</p>
+				</div>
+				<div class="col s3">
+					<div>
+						<a v-on:click="advanceEditTaskListStep('9')" class="waves-effect waves-light btn teal darken-4 right">Continue<i class="material-icons right">chevron_right</i></a>
+					</div>
+				</div>
+			</div>
+			
+			<task-collection task-list-title="1" :task-list="allTasks" :edit-task="editTask" :delete-task="deleteTask" :selected-task-id="selectedTaskId" :selected-tasks="selectedTasks"></task-collection>
+		</div>
+
+		<div v-if="editTaskListStep == '9'">
+			<div class="row"></div>
+			<div class="row">
+				<div class="col s9">
+					<h5>3</h5>
+					<p>Select three task that are of low priority for today</p>
+				</div>
+				<div class="col s3">
+					<div>
+						<a v-on:click="advanceEditTaskListStep('0')" class="waves-effect waves-light btn teal darken-4 right">Continue<i class="material-icons right">chevron_right</i></a>
+					</div>
+				</div>
+			</div>
+			
+			<task-collection task-list-title="1" :task-list="allTasks" :edit-task="editTask" :delete-task="deleteTask" :selected-task-id="selectedTaskId" :selected-tasks="selectedTasks"></task-collection>
+		</div>
+
 	</div>
 </template>
 
@@ -391,7 +425,7 @@
 	})
 
 	var CreateTaskListAll = Vue.component('create-task-list-all', {
-		props: ['updateActivePage'],
+		props: ['updateActivePage', 'finalTaskList'],
 		template: '#create-task-list-all-template',
 		data: function () {
 			return {
@@ -435,6 +469,12 @@
 					tasks3: [],
 					tasks9: [],
 					tasks0: [],
+				},
+				taskListsMapping: {
+					'1': 'tasks1',
+					'3': 'tasks3',
+					'9': 'tasks9',
+					'0': 'tasks0'
 				}
 			}
 		},
@@ -490,22 +530,34 @@
 				return false
 			},
 			advanceEditTaskListStep: function (step) {
+				if (step == '0') {
+
+					router.push({ path: '/tasks' })
+				}
 				if (step == '1') {
 					this.allTasks = this.tasks.concat(this.pendingTasks)
 				}
-				if (this.editTaskListStep == '1') {
-					var task = {}
-					for (var i = 0; i < this.allTasks.length; i++) {
-						if (this.allTasks[i].id == this.selectedTaskIdFromList) {
-							task = this.allTasks[i]
-							this.allTasks.splice(i, 1)
+				
+				if (this.editTaskListStep == '1' || this.editTaskListStep == '3' || this.editTaskListStep == '9') {
+					tasks = []
+					for (var i = 0; i < this.selectedTasks.length; i++) {
+						var task = {}
+						for (var j = 0; j < this.allTasks.length; j++) {
+							if (this.allTasks[j].id == this.selectedTasks[i]) {
+								task = this.allTasks[j]
+								this.allTasks.splice(j, 1)
+							}
 						}
+						task.priority = this.editTaskListStep
+						tasks.push(task)
 					}
-					this.taskLists.tasks1.push(task)
+
+					var taskList = this.taskLists[this.taskListsMapping[task.priority]]
+					taskList.concat(tasks)
+					this.selectedTasks = []
 				}
+				
 				this.editTaskListStep = step
-				// Continue, change logic to select more than one task...
-				// Show feedback to user when selecting a task
 			},
 			selectedTaskId: function (id) {
 				var index = this.selectedTasks.indexOf(id)
@@ -561,47 +613,21 @@ var TaskListComponent = Vue.component('task-list-container', {
 	data: function() {
 		return {
 			activeList: '1',
-			taskLists: {
-				tasks1: [
-				{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1', dateAdded: getCurrentDate() },
-				],
-				tasks3: [
-				{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
-				{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
-				{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
-				],
-				tasks9: [
-				{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				],
-				tasks0: [
-				{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
-				{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
-				{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
-				{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
-				],
-			},
+			finalTaskList: {},
 		}
 	},
 	methods: {
 			updateTaskListStatus: function (task) {		// Write a clever code to check this...
 				priority = task.priority;
 				if (priority == '1') {
-					if (this.taskLists.tasks1[0].isCompleted) {
+					if (this.finalTaskList.tasks1[0].isCompleted) {
 						this.activeList = '3'
 					}
 				}
 				if (priority == '3') {
 					threeCompleted = true
-					for (var i = 0; i < this.taskLists.tasks3.length; i++) {
-						if (this.taskLists.tasks3[i].isCompleted == false) {
+					for (var i = 0; i < this.finalTaskList.tasks3.length; i++) {
+						if (this.finalTaskList.tasks3[i].isCompleted == false) {
 							threeCompleted = false
 						}
 					}
@@ -611,8 +637,8 @@ var TaskListComponent = Vue.component('task-list-container', {
 				}
 				if (priority == '9') {
 					nineCompleted = true;
-					for (var i = 0; i < this.taskLists.tasks9.length; i++) {
-						if (this.taskLists.tasks9[i].isCompleted == false) {
+					for (var i = 0; i < this.finalTaskList.tasks9.length; i++) {
+						if (this.finalTaskList.tasks9[i].isCompleted == false) {
 							nineCompleted = false
 						}
 					}
