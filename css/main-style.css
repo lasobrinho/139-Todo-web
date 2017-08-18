@@ -134,9 +134,16 @@ span[id^="task-"]:hover {
 	text-decoration: line-through;
 }
 
+ul.collection {
+	border: none;
+}
+
 .task-collection-li {
 	padding-top: 5px !important;
 	padding-bottom: 5px !important;
+	border: 1px solid #e0e0e0;
+	border-radius: 3px;
+	margin-bottom: 2px !important;
 }
 
 .task-collection-row {
@@ -149,6 +156,15 @@ span[id^="task-"]:hover {
 
 .task-collection-secondary {
 	font-size: 12px;
+}
+
+.task-collection-li:hover {
+	background-color: #eff7f6;
+}
+
+.task-li-selected {
+	background-color: #eff7f6 !important;
+	border: 1px solid #009688 !important;
 }
 
 .btn-flat {
