@@ -29,7 +29,7 @@
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
 					<li v-if="!logged" v-bind:class="{ active: isPageActive('login') }"><router-link to="/login" class="teal-text text-darken-4">Sign In</router-link></li>
 					<li v-if="logged" v-bind:class="{ active: isPageActive('tasks') }"><router-link to="/tasks" class="teal-text text-darken-4">Tasks</router-link></li>
-					<li v-if="logged" v-bind:class="{ active: isPageActive('createTaskList') }"><router-link to="/createTaskList" class="teal-text text-darken-4">Create Task List</router-link></li>
+					<!-- <li v-if="logged" v-bind:class="{ active: isPageActive('createTaskList') }"><router-link to="/createTaskList" class="teal-text text-darken-4">Create Task List</router-link></li> -->
 					<li v-if="logged" v-bind:class="{ active: isPageActive('createTaskListAll') }"><router-link to="/createTaskListAll" class="teal-text text-darken-4">Create Task List All</router-link></li>
 					<li v-if="logged" v-bind:class="{ active: isPageActive('settings') }"><a href="#" class="teal-text text-darken-4">Settings</a></li>
 					<li v-if="logged"><a v-on:click="performUserLogout()" class="teal-text text-darken-4">Logout</a></li>
@@ -90,10 +90,10 @@
 
 		<div class="task-viewport valign-wrapper center-align">			
 			<transition name="my-slide" mode="out-in">
-				<task-list v-if="isListActive('1')" key="task-1" :task-list="taskLists.tasks1" :list-title="'1'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
-				<task-list v-if="isListActive('3')" key="task-3" :task-list="taskLists.tasks3" :list-title="'3'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
-				<task-list v-if="isListActive('9')" key="task-9" :task-list="taskLists.tasks9" :list-title="'9'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
-				<task-list v-if="isListActive('0')" key="task-0" :task-list="taskLists.tasks0" :list-title="'0'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
+				<task-list v-if="isListActive('1')" key="task-1" :task-list="mytasks.tasks1" :list-title="'1'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
+				<task-list v-if="isListActive('3')" key="task-3" :task-list="mytasks.tasks3" :list-title="'3'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
+				<task-list v-if="isListActive('9')" key="task-9" :task-list="mytasks.tasks9" :list-title="'9'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
+				<task-list v-if="isListActive('0')" key="task-0" :task-list="mytasks.tasks0" :list-title="'0'" :active-list="activeList" :update-task-list-status="updateTaskListStatus"></task-list>
 			</transition>
 		</div>
 	</div>
@@ -252,7 +252,7 @@
 			<div class="row">
 				<div class="col s9">
 					<h5>1</h5>
-					<p>Select the task that is your biggest priority for today</p>
+					<p>Select the task that is your highest priority for today</p>
 				</div>
 				<div class="col s3">
 					<div>
@@ -285,7 +285,7 @@
 			<div class="row"></div>
 			<div class="row">
 				<div class="col s9">
-					<h5>3</h5>
+					<h5>9</h5>
 					<p>Select three task that are of low priority for today</p>
 				</div>
 				<div class="col s3">
@@ -304,11 +304,338 @@
 
 <script type="text/javascript">
 
-	function getCurrentDate() {
-		var date = new Date()
-		return date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear()
-	}
+function getCurrentDate() {
+	var date = new Date()
+	return date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear()
+}
 
+var CreateTaskListAll = Vue.component('create-task-list-all', {
+	props: ['updateActivePage'],
+	template: '#create-task-list-all-template',
+	data: function () {
+		return {
+			task: {
+				id: 0, 
+				text: '', 
+				isCompleted: false, 
+				priority: '',
+				dateAdded: ''
+			},
+			tasks: [],
+			pendingTasks: [
+			{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1', dateAdded: getCurrentDate() },
+			{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
+			{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
+			{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
+			{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+			{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+			{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+			{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+			{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+			{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+			{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+			{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+			{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
+			{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+			{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+			{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+			{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
+			],
+			taskAction: {
+				'add': true,
+				'edit': false
+			},
+			editTaskListStep: 'editTaskList',
+			selectedTaskIdFromList: '',
+			selectedTasks: [],
+			allTasks: [],
+			taskLists: {
+				tasks1: [],
+				tasks3: [],
+				tasks9: [],
+				tasks0: [],
+			},
+			taskListsMapping: {
+				'1': 'tasks1',
+				'3': 'tasks3',
+				'9': 'tasks9',
+				'0': 'tasks0'
+			}
+		}
+	},
+	methods: {
+		setTaskAction: function (taskAction) {
+			if (taskAction == 'add') {
+				this.taskAction = { 'add': true, 'edit': false }
+			}
+			if (taskAction == 'edit') {
+				this.taskAction = { 'add': false, 'edit': true }
+			}
+		},
+		resetTask: function () {
+			this.task = {
+				id: 0, 
+				text: '', 
+				isCompleted: false, 
+				priority: '',
+				dateAdded: ''
+			}
+		},
+		addTask: function () {
+			this.task.id = Math.random()
+			this.tasks.push(this.task)
+			this.resetTask()
+		},
+		addTaskToNewList: function (task) {
+			this.tasks.push(task)
+		},
+		editTask: function (task) {
+			this.setTaskAction('edit')
+			this.task = task
+		},
+		finishEditTask: function () {
+			this.resetTask()
+			this.setTaskAction('add')
+		},
+		deleteTask: function (task) {
+			if (task.priority) {
+				var taskList = this.pendingTasks
+			} else {
+				var taskList = this.tasks
+			}
+			var index = taskList.indexOf(task);
+			if (index > -1) {
+				taskList.splice(index, 1);
+			}				
+		},
+		validateTask: function () {
+			if (this.task.text == '') {
+				return true
+			}
+			return false
+		},
+		advanceEditTaskListStep: function (step) {
+			if (step == '0') {
+				router.push({ name: 'tasks', params: { mytasks: this.taskLists } })
+			}
+			if (step == '1') {
+				this.allTasks = this.tasks.concat(this.pendingTasks)
+			}
+
+			if (this.editTaskListStep == '1' || this.editTaskListStep == '3' || this.editTaskListStep == '9') {
+				tasks = []
+				for (var i = 0; i < this.selectedTasks.length; i++) {
+					var task = {}
+					for (var j = 0; j < this.allTasks.length; j++) {
+						if (this.allTasks[j].id == this.selectedTasks[i]) {
+							task = this.allTasks[j]
+							this.allTasks.splice(j, 1)
+						}
+					}
+					task.priority = this.editTaskListStep
+					tasks.push(task)
+				}
+
+				var taskList = this.taskLists[this.taskListsMapping[this.editTaskListStep]]
+				for (var i = 0; i < tasks.length; i++) {
+					taskList.push(tasks[i])
+				}
+				this.selectedTasks = []
+
+				if (step == '0') {
+					var taskList = this.taskLists[this.taskListsMapping['0']]
+					for (var i = 0; i < this.allTasks.length; i++) {
+						taskList.push(this.allTasks[i])
+					}
+				}
+			}
+
+			this.editTaskListStep = step
+		},
+		selectedTaskId: function (id) {
+			var index = this.selectedTasks.indexOf(id)
+			if (index != -1) {
+				this.selectedTasks.splice(index, 1)
+			} else {
+				if (this.editTaskListStep == '1') {
+					if (this.selectedTasks.length == 1) {
+						return
+					}
+				} else if (this.editTaskListStep == '3') {
+					if (this.selectedTasks.length == 3) {
+						return
+					}
+				} else if (this.editTaskListStep == '9') {
+					if (this.selectedTasks.length == 9) {
+						return
+					}
+				}
+				this.selectedTasks.push(id)
+			}
+		}
+	},
+	mounted: function () {
+		this.updateActivePage("createTaskListAll")
+	}
+})
+
+Vue.component('task-collection', {
+	props: ['taskListTitle', 'taskList', 'editTask', 'deleteTask', 'selectedTaskId', 'selectedTasks'],
+	template: '#task-collection-template'
+})
+
+
+Vue.component('task', {
+	props: ['task', 'updateTaskListStatus'],
+	template: '#task-template',
+	methods: {
+		checkTask: function (task, event) {
+			task.isCompleted = !(task.isCompleted)
+			document.getElementById("task-" + task.id).classList.add('taskCompleted')
+			this.updateTaskListStatus(task)
+		},
+		generateTagId: function (id) {
+			return "task-" + id
+		},
+	}
+})
+
+var TaskListComponent = Vue.component('task-list-container', {
+	props: ['userName', 'updateActivePage', 'mytasks'],
+	template: '#task-list-container-template',
+	data: function() {
+		return {
+			activeList: '1'
+		}
+	},
+	methods: {
+		updateTaskListStatus: function (task) {		// Write a clever code to check this...
+			priority = task.priority;
+			if (priority == '1') {
+				if (this.mytasks.tasks1[0].isCompleted) {
+					this.activeList = '3'
+				}
+			}
+			if (priority == '3') {
+				threeCompleted = true
+				for (var i = 0; i < this.mytasks.tasks3.length; i++) {
+					if (this.mytasks.tasks3[i].isCompleted == false) {
+						threeCompleted = false
+					}
+				}
+				if (threeCompleted) {
+					this.activeList = '9'
+				}
+			}
+			if (priority == '9') {
+				nineCompleted = true;
+				for (var i = 0; i < this.mytasks.tasks9.length; i++) {
+					if (this.mytasks.tasks9[i].isCompleted == false) {
+						nineCompleted = false
+					}
+				}
+				if (nineCompleted) {
+					this.activeList = '0'
+				}
+			}
+		},
+		isListActive: function(listTitle) {
+			if (listTitle == this.activeList) {
+				return true
+			}
+			return false
+		},
+	},
+	mounted: function () {
+		this.updateActivePage("tasks")
+	}
+})
+
+Vue.component('task-list-header', {
+	props: ['userName'],
+	template: '#task-list-header-template'
+})
+
+Vue.component('task-list', {
+	props: ['taskList', 'listTitle', 'activeList', 'updateTaskListStatus'],
+	template: '#task-list-template'
+})
+
+var LoginComponent = Vue.component('login-page', {
+	props: ['populateUserInfo', 'updateActivePage'],
+	template: '#login-page-template',
+	data: function () {
+		return {
+			email: null,
+			password: null
+		}
+	},
+	methods: {
+		performUserLogin: function () {
+			// validate email.value and password.value, return to userInfo
+			// perform login operations in the RESTful API
+			var userInfo = {
+				userID: "3a761bd9",
+				userEmail: "lucas@lasobrinho.com",
+				userName: "Lucas",
+				// ...
+			}
+			if (true) {
+				this.populateUserInfo(userInfo)
+				router.push({ path: '/createTaskListAll' })
+			}
+		}
+	},
+	mounted: function () {
+		this.updateActivePage("login")
+	}
+})
+
+const routes = [
+	{ path: '/tasks', name: 'tasks', component: TaskListComponent, props: true }, 
+	{ path: '/login', component: LoginComponent }, 
+	// { path: '/createTaskList', component: CreateTaskList },
+	{ path: '/createTaskListAll', component: CreateTaskListAll },
+]
+
+const router = new VueRouter({
+	routes: routes
+})
+
+var app = new Vue({
+	el: '#app139',
+	router,
+	data: {
+		logged: false,
+		firstLogin: false,
+		userInfo: {},
+		activePage: ""
+	},
+	methods: {
+		populateUserInfo: function (userInfo) {
+			this.userInfo = userInfo
+			this.logged = true
+		},
+		performUserLogout: function () {
+				// perform logout operations in the RESTful API
+				this.userInfo = {}
+				this.logged = false
+				this.activePage = ""
+				router.push({ path: '/' })
+			},
+		updateActivePage: function (page) {
+			this.activePage = page
+		},
+		isPageActive: function (page) {
+			if (this.activePage == page) {
+				return true
+			}
+			return false
+		}
+	}
+}).$mount('#app139')
+
+/*
 	var CreateTaskList = Vue.component('create-task-list', {
 		props: ['updateActivePage'],
 		template: '#create-task-list-template',
@@ -423,325 +750,7 @@
 			this.updateActivePage("createTaskList")
 		}
 	})
-
-	var CreateTaskListAll = Vue.component('create-task-list-all', {
-		props: ['updateActivePage', 'finalTaskList'],
-		template: '#create-task-list-all-template',
-		data: function () {
-			return {
-				task: {
-					id: 0, 
-					text: '', 
-					isCompleted: false, 
-					priority: '',
-					dateAdded: ''
-				},
-				tasks: [],
-				pendingTasks: [
-				{ id: 1, text: 'Build an MVP for 139', isCompleted: false, priority: '1', dateAdded: getCurrentDate() },
-				{ id: 2, text: 'Learn about with vue.js framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
-				{ id: 3, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
-				{ id: 4, text: 'Continue improving 139', isCompleted: false, priority: '3', dateAdded: getCurrentDate() },
-				{ id: 5, text: 'Build an initial design for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 6, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 7, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 8, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 9, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 10, text: 'Continue improving 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 11, text: 'Learn about with vue.js framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 12, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 13, text: 'Build an MVP for 139', isCompleted: false, priority: '9', dateAdded: getCurrentDate() },
-				{ id: 14, text: 'Continue improving 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
-				{ id: 15, text: 'Learn about with vue.js framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
-				{ id: 16, text: 'Learn about with Materialize CSS framework', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
-				{ id: 17, text: 'Build an MVP for 139', isCompleted: false, priority: '0', dateAdded: getCurrentDate() },
-				],
-				taskAction: {
-					'add': true,
-					'edit': false
-				},
-				editTaskListStep: 'editTaskList',
-				selectedTaskIdFromList: '',
-				selectedTasks: [],
-				allTasks: [],
-				taskLists: {
-					tasks1: [],
-					tasks3: [],
-					tasks9: [],
-					tasks0: [],
-				},
-				taskListsMapping: {
-					'1': 'tasks1',
-					'3': 'tasks3',
-					'9': 'tasks9',
-					'0': 'tasks0'
-				}
-			}
-		},
-		methods: {
-			setTaskAction: function (taskAction) {
-				if (taskAction == 'add') {
-					this.taskAction = { 'add': true, 'edit': false }
-				}
-				if (taskAction == 'edit') {
-					this.taskAction = { 'add': false, 'edit': true }
-				}
-			},
-			resetTask: function () {
-				this.task = {
-					id: 0, 
-					text: '', 
-					isCompleted: false, 
-					priority: '',
-					dateAdded: ''
-				}
-			},
-			addTask: function () {
-				this.task.id = Math.random()
-				this.tasks.push(this.task)
-				this.resetTask()
-			},
-			addTaskToNewList: function (task) {
-				this.tasks.push(task)
-			},
-			editTask: function (task) {
-				this.setTaskAction('edit')
-				this.task = task
-			},
-			finishEditTask: function () {
-				this.resetTask()
-				this.setTaskAction('add')
-			},
-			deleteTask: function (task) {
-				if (task.priority) {
-					var taskList = this.pendingTasks
-				} else {
-					var taskList = this.tasks
-				}
-				var index = taskList.indexOf(task);
-				if (index > -1) {
-					taskList.splice(index, 1);
-				}				
-			},
-			validateTask: function () {
-				if (this.task.text == '') {
-					return true
-				}
-				return false
-			},
-			advanceEditTaskListStep: function (step) {
-				if (step == '0') {
-
-					router.push({ path: '/tasks' })
-				}
-				if (step == '1') {
-					this.allTasks = this.tasks.concat(this.pendingTasks)
-				}
-				
-				if (this.editTaskListStep == '1' || this.editTaskListStep == '3' || this.editTaskListStep == '9') {
-					tasks = []
-					for (var i = 0; i < this.selectedTasks.length; i++) {
-						var task = {}
-						for (var j = 0; j < this.allTasks.length; j++) {
-							if (this.allTasks[j].id == this.selectedTasks[i]) {
-								task = this.allTasks[j]
-								this.allTasks.splice(j, 1)
-							}
-						}
-						task.priority = this.editTaskListStep
-						tasks.push(task)
-					}
-
-					var taskList = this.taskLists[this.taskListsMapping[task.priority]]
-					taskList.concat(tasks)
-					this.selectedTasks = []
-				}
-				
-				this.editTaskListStep = step
-			},
-			selectedTaskId: function (id) {
-				var index = this.selectedTasks.indexOf(id)
-				if (index != -1) {
-					this.selectedTasks.splice(index, 1)
-				} else {
-					if (this.editTaskListStep == '1') {
-						if (this.selectedTasks.length == 1) {
-							return
-						}
-					} else if (this.editTaskListStep == '3') {
-						if (this.selectedTasks.length == 3) {
-							return
-						}
-					} else if (this.editTaskListStep == '9') {
-						if (this.selectedTasks.length == 9) {
-							return
-						}
-					}
-					this.selectedTasks.push(id)
-				}
-			}
-		},
-		mounted: function () {
-			this.updateActivePage("createTaskListAll")
-		}
-	})
-
-Vue.component('task-collection', {
-	props: ['taskListTitle', 'taskList', 'editTask', 'deleteTask', 'selectedTaskId', 'selectedTasks'],
-	template: '#task-collection-template'
-})
-
-
-Vue.component('task', {
-	props: ['task', 'updateTaskListStatus'],
-	template: '#task-template',
-	methods: {
-		checkTask: function (task, event) {
-			task.isCompleted = !(task.isCompleted)
-			document.getElementById("task-" + task.id).classList.add('taskCompleted')
-			this.updateTaskListStatus(task)
-		},
-		generateTagId: function (id) {
-			return "task-" + id
-		},
-	}
-})
-
-var TaskListComponent = Vue.component('task-list-container', {
-	props: ['userName', 'updateActivePage'],
-	template: '#task-list-container-template',
-	data: function() {
-		return {
-			activeList: '1',
-			finalTaskList: {},
-		}
-	},
-	methods: {
-			updateTaskListStatus: function (task) {		// Write a clever code to check this...
-				priority = task.priority;
-				if (priority == '1') {
-					if (this.finalTaskList.tasks1[0].isCompleted) {
-						this.activeList = '3'
-					}
-				}
-				if (priority == '3') {
-					threeCompleted = true
-					for (var i = 0; i < this.finalTaskList.tasks3.length; i++) {
-						if (this.finalTaskList.tasks3[i].isCompleted == false) {
-							threeCompleted = false
-						}
-					}
-					if (threeCompleted) {
-						this.activeList = '9'
-					}
-				}
-				if (priority == '9') {
-					nineCompleted = true;
-					for (var i = 0; i < this.finalTaskList.tasks9.length; i++) {
-						if (this.finalTaskList.tasks9[i].isCompleted == false) {
-							nineCompleted = false
-						}
-					}
-					if (nineCompleted) {
-						this.activeList = '0'
-					}
-				}
-			},
-			isListActive: function(listTitle) {
-				if (listTitle == this.activeList) {
-					return true
-				}
-				return false
-			},
-		},
-		mounted: function () {
-			this.updateActivePage("tasks")
-		}
-	})
-
-Vue.component('task-list-header', {
-	props: ['userName'],
-	template: '#task-list-header-template'
-})
-
-Vue.component('task-list', {
-	props: ['taskList', 'listTitle', 'activeList', 'updateTaskListStatus'],
-	template: '#task-list-template'
-})
-
-var LoginComponent = Vue.component('login-page', {
-	props: ['populateUserInfo', 'updateActivePage'],
-	template: '#login-page-template',
-	data: function () {
-		return {
-			email: null,
-			password: null
-		}
-	},
-	methods: {
-		performUserLogin: function () {
-				// validate email.value and password.value, return to userInfo
-				// perform login operations in the RESTful API
-				var userInfo = {
-					userID: "3a761bd9",
-					userEmail: "lucas@lasobrinho.com",
-					userName: "Lucas",
-					// ...
-				}
-				if (true) {
-					this.populateUserInfo(userInfo)
-					router.push({ path: '/createTaskListAll' })
-				}
-			}
-		},
-		mounted: function () {
-			this.updateActivePage("login")
-		}
-	})
-
-const routes = [
-{ path: '/tasks', component: TaskListComponent }, 
-{ path: '/login', component: LoginComponent }, 
-{ path: '/createTaskList', component: CreateTaskList },
-{ path: '/createTaskListAll', component: CreateTaskListAll },
-]
-
-const router = new VueRouter({
-	routes: routes
-})
-
-var app = new Vue({
-	el: '#app139',
-	router,
-	data: {
-		logged: false,
-		firstLogin: false,
-		userInfo: {},
-		activePage: ""
-	},
-	methods: {
-		populateUserInfo: function (userInfo) {
-			this.userInfo = userInfo
-			this.logged = true
-		},
-		performUserLogout: function () {
-				// perform logout operations in the RESTful API
-				this.userInfo = {}
-				this.logged = false
-				this.activePage = ""
-				router.push({ path: '/' })
-			},
-			updateActivePage: function (page) {
-				this.activePage = page
-			},
-			isPageActive: function (page) {
-				if (this.activePage == page) {
-					return true
-				}
-				return false
-			}
-		}
-	}).$mount('#app139')
+	*/
 
 </script>
 
