@@ -38,7 +38,7 @@
 		</nav>
 		
 		<main class="container">
-			<router-view :user-name="userInfo.userName" :populate-user-info="populateUserInfo" :update-active-page="updateActivePage"></router-view>
+			<router-view :user-info="userInfo" :populate-user-info="populateUserInfo" :update-active-page="updateActivePage"></router-view>
 		</main>
 	</div>
 </body>
@@ -60,7 +60,7 @@
 		<div class="row"></div>
 		<div class="row center">
 			<div class="col s12">
-				<h4 class="top-title ">Welcome {{ userName }}! Here are your tasks for today:</h4>
+				<h4 class="top-title ">Welcome {{ userInfo.userName }}! Here are your tasks for today:</h4>
 			</div>
 		</div>
 	</div>
@@ -86,7 +86,7 @@
 <!-- Task list container template -->
 <template id="task-list-container-template">
 	<div>
-		<task-list-header :user-name="userName"></task-list-header>
+		<task-list-header :user-info="userInfo.userName"></task-list-header>
 
 		<div class="task-viewport valign-wrapper center-align">			
 			<transition name="my-slide" mode="out-in">
@@ -310,7 +310,7 @@ function getCurrentDate() {
 }
 
 var CreateTaskListAll = Vue.component('create-task-list-all', {
-	props: ['updateActivePage'],
+	props: ['updateActivePage', 'userInfo'],
 	template: '#create-task-list-all-template',
 	data: function () {
 		return {
@@ -416,6 +416,7 @@ var CreateTaskListAll = Vue.component('create-task-list-all', {
 		},
 		advanceEditTaskListStep: function (step) {
 			if (step == '0') {
+				this.userInfo.firstDailyLogin = false
 				router.push({ name: 'tasks', params: { mytasks: this.taskLists } })
 			}
 			if (step == '1') {
@@ -502,7 +503,7 @@ Vue.component('task', {
 })
 
 var TaskListComponent = Vue.component('task-list-container', {
-	props: ['userName', 'updateActivePage', 'mytasks'],
+	props: ['userInfo', 'updateActivePage', 'mytasks'],
 	template: '#task-list-container-template',
 	data: function() {
 		return {
@@ -510,7 +511,7 @@ var TaskListComponent = Vue.component('task-list-container', {
 		}
 	},
 	methods: {
-		updateTaskListStatus: function (task) {		// Write a clever code to check this...
+		updateTaskListStatus: function (task) {
 			priority = task.priority;
 			if (priority == '1') {
 				if (this.mytasks.tasks1[0].isCompleted) {
@@ -555,7 +556,7 @@ var TaskListComponent = Vue.component('task-list-container', {
 })
 
 Vue.component('task-list-header', {
-	props: ['userName'],
+	props: ['userInfo'],
 	template: '#task-list-header-template'
 })
 
@@ -575,17 +576,19 @@ var LoginComponent = Vue.component('login-page', {
 	},
 	methods: {
 		performUserLogin: function () {
-			// validate email.value and password.value, return to userInfo
-			// perform login operations in the RESTful API
 			var userInfo = {
 				userID: "3a761bd9",
 				userEmail: "lucas@lasobrinho.com",
 				userName: "Lucas",
-				// ...
+				firstDailyLogin: true,
 			}
-			if (true) {
+			if (userInfo) {
 				this.populateUserInfo(userInfo)
-				router.push({ path: '/createTaskListAll' })
+				if (userInfo.firstDailyLogin) {
+					router.push({ path: '/createTaskListAll' })
+				} else {
+					router.push({ path: '/tasks' })
+				}
 			}
 		}
 	},
@@ -595,9 +598,8 @@ var LoginComponent = Vue.component('login-page', {
 })
 
 const routes = [
-	{ path: '/tasks', name: 'tasks', component: TaskListComponent, props: true }, 
-	{ path: '/login', component: LoginComponent }, 
-	// { path: '/createTaskList', component: CreateTaskList },
+	{ path: '/tasks', name: 'tasks', component: TaskListComponent, props: true },
+	{ path: '/login', component: LoginComponent },
 	{ path: '/createTaskListAll', component: CreateTaskListAll },
 ]
 
@@ -610,7 +612,6 @@ var app = new Vue({
 	router,
 	data: {
 		logged: false,
-		firstLogin: false,
 		userInfo: {},
 		activePage: ""
 	},
