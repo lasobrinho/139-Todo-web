@@ -189,7 +189,7 @@
 			</div>
 			<div class="row">
 				<div class="input-field col s11">
-					<input v-model="task.text" id="task_description" type="text">
+					<input v-focus ref="description" v-model="task.text" id="task_description" type="text">
 					<label for="first_name">Task Description</label>
 				</div>			
 				<div class="input-field col s1 center">
@@ -333,6 +333,7 @@ var CreateTaskListAll = Vue.component('create-task-list-all', {
 			this.task.id = Math.random()
 			this.tasks.push(this.task)
 			this.resetTask()
+			this.$refs.description.focus()
 		},
 		addTaskToNewList: function (task) {
 			this.tasks.push(task)
@@ -340,10 +341,12 @@ var CreateTaskListAll = Vue.component('create-task-list-all', {
 		editTask: function (task) {
 			this.setTaskAction('edit')
 			this.task = task
+			this.$refs.description.focus()
 		},
 		finishEditTask: function () {
 			this.resetTask()
 			this.setTaskAction('add')
+			this.$refs.description.focus()
 		},
 		deleteTask: function (task) {
 			if (task.priority) {
@@ -554,6 +557,12 @@ const routes = [
 
 const router = new VueRouter({
 	routes: routes
+})
+
+Vue.directive('focus', {
+	inserted: function (el) {
+		el.focus()
+	}
 })
 
 var app = new Vue({
