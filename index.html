@@ -183,7 +183,7 @@
 				</div>
 				<div class="col s3">
 					<div>
-						<a v-on:click="advanceEditTaskListStep('1')" class="waves-effect waves-light btn teal darken-4 right">Continue<i class="material-icons right">chevron_right</i></a>
+						<a v-on:click="advanceEditTaskListStep('1')" class="waves-effect waves-light btn teal darken-4 right" v-bind:class="{ disabled: tasks.length == 0 && pendingTasks.length == 0 }">Continue<i class="material-icons right">chevron_right</i></a>
 					</div>
 				</div>
 			</div>
@@ -222,7 +222,7 @@
 				</div>
 				<div class="col s3">
 					<div>
-						<a v-on:click="advanceEditTaskListStep('3')" class="waves-effect waves-light btn teal darken-4 right">Continue<i class="material-icons right">chevron_right</i></a>
+						<a v-on:click="advanceEditTaskListStep('3')" class="waves-effect waves-light btn teal darken-4 right" v-bind:class="{ disabled: selectedTasks.length == 0 }">Continue<i class="material-icons right">chevron_right</i></a>
 					</div>
 				</div>
 			</div>
@@ -239,7 +239,7 @@
 				</div>
 				<div class="col s3">
 					<div>
-						<a v-on:click="advanceEditTaskListStep('9')" class="waves-effect waves-light btn teal darken-4 right">Continue<i class="material-icons right">chevron_right</i></a>
+						<a v-on:click="advanceEditTaskListStep('9')" class="waves-effect waves-light btn teal darken-4 right" v-bind:class="{ disabled: selectedTasks.length == 0 && allTasks.length != 0 }">Continue<i class="material-icons right">chevron_right</i></a>
 					</div>
 				</div>
 			</div>
@@ -256,7 +256,7 @@
 				</div>
 				<div class="col s3">
 					<div>
-						<a v-on:click="advanceEditTaskListStep('0')" class="waves-effect waves-light btn teal darken-4 right">Continue<i class="material-icons right">chevron_right</i></a>
+						<a v-on:click="advanceEditTaskListStep('0')" class="waves-effect waves-light btn teal darken-4 right" v-bind:class="{ disabled: selectedTasks.length == 0 && allTasks.length != 0 }">Continue<i class="material-icons right">chevron_right</i></a>
 					</div>
 				</div>
 			</div>
