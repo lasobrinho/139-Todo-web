@@ -445,6 +445,7 @@ var CreateTaskListAll = Vue.component('create-task-list-all', {
 				if (step == '0') {
 					var taskList = this.taskLists[this.taskListsMapping['0']]
 					for (var i = 0; i < this.allTasks.length; i++) {
+						this.allTasks[i].priority = '0'
 						taskList.push(this.allTasks[i])
 					}
 				}
@@ -540,6 +541,8 @@ var TaskListComponent = Vue.component('task-list-container', {
 			}
 		},
 		isListActive: function(listTitle) {
+			console.log(this.mytasks)
+			console.log(this.activeList)
 			if (listTitle == this.activeList) {
 				return true
 			}
@@ -634,123 +637,6 @@ var app = new Vue({
 		}
 	}
 }).$mount('#app139')
-
-/*
-	var CreateTaskList = Vue.component('create-task-list', {
-		props: ['updateActivePage'],
-		template: '#create-task-list-template',
-		data: function () {
-			return {
-				task: {
-					id: 0, 
-					text: '', 
-					isCompleted: false, 
-					priority: ''
-				},
-				tasks: [],
-				taskLists: {
-					tasks1: [],
-					tasks3: [],
-					tasks9: [],
-					tasks0: []
-				},
-				taskListsMapping: {
-					'1': 'tasks1',
-					'3': 'tasks3',
-					'9': 'tasks9',
-					'0': 'tasks0'
-				},
-				taskAction: {
-					'add': true,
-					'edit': false
-				}
-			}
-		},
-		methods: {
-			setTaskAction: function (taskAction) {
-				if (taskAction == 'add') {
-					this.taskAction = { 'add': true, 'edit': false }
-				}
-				if (taskAction == 'edit') {
-					this.taskAction = { 'add': false, 'edit': true }
-				}
-			},
-			resetTask: function () {
-				this.task = {
-					id: 0, 
-					text: '', 
-					isCompleted: false, 
-					priority: ''
-				}
-			},
-			addTask: function () {
-				this.task.id = Math.random()
-				this.taskLists[this.taskListsMapping[this.task.priority]].push(this.task)
-				this.resetTask()
-			},
-			addTaskToNewList: function (task) {
-				this.taskLists[this.taskListsMapping[task.priority]].push(task)
-			},
-			editTask: function (task) {
-				this.setTaskAction('edit')
-				this.task = task
-			},
-			finishEditTask: function () {
-				this.resetTask()
-				this.setTaskAction('add')
-			},
-			deleteTask: function (task) {
-				var taskList = this.taskLists[this.taskListsMapping[task.priority]]
-				var index = taskList.indexOf(task);
-				if (index > -1) {
-					taskList.splice(index, 1);
-				}
-			},
-			setTaskPriority: function (task, priority) {
-				if (this.isPriorityListFull(priority)) {
-					return
-				}
-				if (this.taskAction.edit) {
-					if (task.priority != priority) {
-						var tempTask = task
-						this.deleteTask(task)
-						tempTask.priority = priority
-						this.addTaskToNewList(tempTask)
-					}
-				} else {
-					task.priority = priority
-				}
-			},
-			isPriorityNotSelected: function (priority) {
-				if (this.task.priority == '') {
-					return false
-				}
-				return !(this.task.priority == priority)
-			},
-			isPriorityListFull: function (priority) {
-				if (this.taskLists[this.taskListsMapping[priority]].length == parseInt(priority)) {
-					return true
-				}
-				return false
-			},
-			disableOtherTasks: function () {
-				if (this.isPriorityListFull('1') && this.isPriorityListFull('3') && this.isPriorityListFull('9')) {
-					return false
-				}
-				return true
-			},
-			validateTask: function () {
-				if (this.task.text == '' || this.task.priority == '') {
-					return true
-				}
-				return false
-			}
-		},
-		mounted: function () {
-			this.updateActivePage("createTaskList")
-		}
-	})
-	*/
 
 </script>
 
